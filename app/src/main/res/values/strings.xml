@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Go4Lunch</string>
+
+    <string name="facebook_application_id" translatable="false">982420739231162</string>
+    <string name="fb_login_protocol_scheme" translatable="false" tools:ignore="UnusedResources">fb982420739231162</string>
+    <string name="location_permission_denied">value</string>
+    <string name="permission_required_toast" />
+    <string name="permission_rationale_location">value</string>
+    
+    <string name="bottom_navigation_menu_workmates"> Workmates</string>
+    <string name="bottom_navigation_menu_listView">List View</string>
+    <string name="bottom_navigation_menu_mapView">Map View</string>
+</resources>
