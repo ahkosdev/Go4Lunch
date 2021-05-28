@@ -4,7 +4,56 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".controller.activities.HomepageActivity">
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/homepage_activity_drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:openDrawer="start"
+        android:backgroundTint="@color/colorIconChecked"
+        android:layout_above="@+id/homepage_activity_bottom_navigation"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/homepage_activity_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                app:title="I'm Hungry"/>
+
+            <FrameLayout
+                android:id="@+id/homepage_frame_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/homepage_nav_drawer_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/drawer_nav_header"
+            app:menu="@menu/drawer_nav_menu"
+            android:background="@color/colorIconChecked"
+
+            />
+
+
+    </androidx.drawerlayout.widget.DrawerLayout>
 
     <FrameLayout
         android:id="@+id/homepage_container"

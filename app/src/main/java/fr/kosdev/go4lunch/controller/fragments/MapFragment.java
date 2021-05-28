@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -31,10 +34,15 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.zip.Inflater;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import fr.kosdev.go4lunch.R;
 
 
 public class MapFragment extends Fragment  {
+
+    @BindView(R.id.homepage_activity_toolbar)
+    Toolbar mToolbar;
 
     private GoogleMap mMap;
     private FusedLocationProviderClient mLocationProviderClient;
@@ -43,6 +51,18 @@ public class MapFragment extends Fragment  {
 
 
     public MapFragment() {
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        ButterKnife.bind(getActivity());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.drawer_nav_menu, menu);
     }
 
 
