@@ -15,6 +15,7 @@ android {
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -37,12 +38,15 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.2.3'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    //implementation 'com.robbypond:facebook-android-sdk:3.17.1'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
     implementation platform('com.google.firebase:firebase-bom:27.1.0')
     implementation 'com.google.firebase:firebase-analytics'
     //Firebase UI
     implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
+    implementation 'com.firebaseui:firebase-ui-firestore:3.1.3'
     implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'com.google.android.libraries.places:places:2.4.0'

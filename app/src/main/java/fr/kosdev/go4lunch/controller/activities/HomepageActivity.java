@@ -22,7 +22,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.controller.fragments.ListViewFragment;
+import fr.kosdev.go4lunch.controller.fragments.LogoutFragment;
+import fr.kosdev.go4lunch.controller.fragments.LunchFragment;
 import fr.kosdev.go4lunch.controller.fragments.MapFragment;
+import fr.kosdev.go4lunch.controller.fragments.SettingFragment;
 import fr.kosdev.go4lunch.controller.fragments.WorkmatesFragment;
 
 public class HomepageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,6 +39,16 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
     @BindView(R.id.homepage_nav_drawer_view)
     NavigationView mNavigationView;
 
+    private Fragment lunchFragment;
+    private Fragment settingFragment;
+    private Fragment logoutFragment;
+
+    private static final int LUNCH_FRAGMENT = 0;
+    private static final int SETTING_FRAGMENT = 1;
+    private static final int LOGOUT_FRAGMENT = 2;
+
+
+
 
 
     @Override
@@ -47,7 +60,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         this.configureToolbar();
         this.configureNavigationView();
         this.configureDrawerLayout();
-        //getSupportFragmentManager().beginTransaction().add(R.id.homepage_container, new MapFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.homepage_frame_layout, new MapFragment()).commit();
 
        // FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -76,7 +89,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
                 }
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.homepage_container, selectedFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.homepage_frame_layout, selectedFragment).commit();
 
                 return true;
             }
@@ -90,11 +103,13 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         int id = item.getItemId();
         switch (id){
             case R.id.lunch_menu:
+                this.showFragment(LUNCH_FRAGMENT);
                 break;
             case R.id.settings_menu:
+                this.showFragment(SETTING_FRAGMENT);
                 break;
-
             case R.id.logout_menu:
+                this.showFragment(LOGOUT_FRAGMENT);
                 break;
 
             default:
@@ -129,4 +144,45 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
     }
+
+    private void startTransactionFragment(Fragment fragment){
+        if (!fragment.isVisible()){
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.homepage_frame_layout, fragment).commit();
+        }
+    }
+
+    private void  showLunchFragment(){
+        if (lunchFragment == null) lunchFragment = LunchFragment.newInstance();
+        this.startTransactionFragment(lunchFragment);
+    }
+
+    private void showSettingFragment(){
+
+        if (settingFragment == null) settingFragment = SettingFragment.newInstance();
+        this.startTransactionFragment(settingFragment);
+    }
+
+    private void showLogoutFragment(){
+
+        if (logoutFragment == null) logoutFragment = LogoutFragment.newInstance();
+        this.startTransactionFragment(logoutFragment);
+    }
+    private void showFragment(int fragmentIdentifier){
+        switch (fragmentIdentifier){
+            case LUNCH_FRAGMENT :
+                this.showLunchFragment();
+                break;
+            case SETTING_FRAGMENT:
+                this.showSettingFragment();
+                break;
+            case LOGOUT_FRAGMENT:
+                this.showLogoutFragment();
+                break;
+            default:
+                break;
+        }
+
+    }
+
 }

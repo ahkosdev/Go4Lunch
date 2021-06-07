@@ -2,9 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fr.kosdev.go4lunch">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".controller.activities.RestaurantDetailActivity"></activity>
         <activity android:name=".controller.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,18 +20,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".controller.activities.HomepageActivity"
+        <activity
+            android:name=".controller.activities.HomepageActivity"
             android:label=""
-            android:parentActivityName=".controller.activities.MainActivity"/>
+            android:parentActivityName=".controller.activities.MainActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_application_id" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBk1fsJRc21Wlt0usxn_UtjPhY2waPqiRE"/>
+            android:value="AIzaSyBk1fsJRc21Wlt0usxn_UtjPhY2waPqiRE" />
     </application>
 
 </manifest>

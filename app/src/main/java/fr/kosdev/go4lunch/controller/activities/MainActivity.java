@@ -8,14 +8,20 @@ import android.os.Bundle;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 
 import fr.kosdev.go4lunch.R;
+import fr.kosdev.go4lunch.api.WorkmateHelper;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 125;
+    private String firstname;
+    private String uid;
+    private String urlPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +59,26 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN){
             if (resultCode == RESULT_OK){
                 this.startHomepageActivity();
+                this.createWorkmateInFireStore();
 
             }
         }
     }
+
+    private FirebaseUser getCurrentUser(){
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    private void createWorkmateInFireStore(){
+        if (this.getCurrentUser() != null){
+            String uid = this.getCurrentUser().getUid();
+            String firstname = this.getCurrentUser().getDisplayName();
+            String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ?
+                    this.getCurrentUser().getPhotoUrl().toString():null;
+
+            WorkmateHelper.createWorkmate(uid,firstname,urlPicture);
+        }
+    }
+
+
 }

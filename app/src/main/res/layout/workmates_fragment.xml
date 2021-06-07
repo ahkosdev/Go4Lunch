@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.recyclerview.widget.RecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/workmates_rcv"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent">
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+    tools:listitem="@layout/workmates_items"
+    tools:context=".controller.activities.HomepageActivity">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/homepage_activity_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/Widget.AppCompat.Toolbar"/>
 
-</LinearLayout>
+
+</androidx.recyclerview.widget.RecyclerView>

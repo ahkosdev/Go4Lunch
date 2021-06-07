@@ -14,7 +14,6 @@
         android:fitsSystemWindows="true"
         tools:openDrawer="start"
         android:backgroundTint="@color/colorIconChecked"
-        android:layout_above="@+id/homepage_activity_bottom_navigation"
         >
 
         <LinearLayout
@@ -55,11 +54,6 @@
 
     </androidx.drawerlayout.widget.DrawerLayout>
 
-    <FrameLayout
-        android:id="@+id/homepage_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/homepage_activity_bottom_navigation"/>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

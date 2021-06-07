@@ -41,8 +41,7 @@ import fr.kosdev.go4lunch.R;
 
 public class MapFragment extends Fragment  {
 
-    @BindView(R.id.homepage_activity_toolbar)
-    Toolbar mToolbar;
+
 
     private GoogleMap mMap;
     private FusedLocationProviderClient mLocationProviderClient;
@@ -60,10 +59,7 @@ public class MapFragment extends Fragment  {
         ButterKnife.bind(getActivity());
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.drawer_nav_menu, menu);
-    }
+
 
 
     @Nullable
