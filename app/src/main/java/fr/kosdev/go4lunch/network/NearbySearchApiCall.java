@@ -13,7 +13,7 @@ public interface NearbySearchApiCall {
     Call<Example> getNearbyPlace(@Query("type") String type, @Query("location") String location, @Query("radius") int radius);
 
     public static final Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://maps.googleapis.com/maps")
+            .baseUrl("https://maps.googleapis.com/maps/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 }

@@ -18,15 +18,19 @@ public class WorkmateHelper {
         return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
     }
 
-    public static Task<Void> createWorkmate(String uid, String firstname, String urlPicture){
+    public static Query getWorkmates(){
+        return WorkmateHelper.getWorkmatesCollection();
+    }
 
-        Workmate workmateToCreate = new Workmate(uid, firstname, urlPicture);
+    public static Task<Void> createWorkmate(String uid, String firstname, String lastname, String urlPicture){
+
+        Workmate workmateToCreate = new Workmate(uid, firstname, lastname, urlPicture);
         return WorkmateHelper.getWorkmatesCollection().document(uid).set(workmateToCreate);
     }
 
-    public static Query getWorkmate(FirebaseUser user){
+    public static Task<DocumentSnapshot> getWorkmate(String uid){
 
-        return WorkmateHelper.getWorkmatesCollection().whereEqualTo("uid", user.getUid());
+        return WorkmateHelper.getWorkmatesCollection().document(uid).get();
     }
 
     public static Task<Void> updateWorkmate(String firstname, String uid){

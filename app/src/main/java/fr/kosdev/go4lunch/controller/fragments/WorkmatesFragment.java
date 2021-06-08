@@ -43,7 +43,6 @@ public class WorkmatesFragment extends Fragment {
     RecyclerView workmateRcv;
 
     private WorkmateRecyclerViewAdapter workmateAdapter;
-    private FirebaseUser user;
 
 
 
@@ -53,14 +52,14 @@ public class WorkmatesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.workmates_fragment, container, false);
-        this.configureRecyclerView(this.getCurrentUser());
+        ButterKnife.bind(this, view);
+        this.configureRecyclerView();
         return view;
     }
 
-    private void configureRecyclerView(FirebaseUser user){
-        this.user = user;
+    private void configureRecyclerView(){
 
-        workmateAdapter = new WorkmateRecyclerViewAdapter(getOptionsForAdapter(WorkmateHelper.getWorkmate(user)));
+        workmateAdapter = new WorkmateRecyclerViewAdapter(getOptionsForAdapter(WorkmateHelper.getWorkmates()));
         workmateRcv.setAdapter(workmateAdapter);
 
     }
@@ -73,9 +72,6 @@ public class WorkmatesFragment extends Fragment {
                 .build();
     }
 
-    private FirebaseUser getCurrentUser(){
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
 
 
 }

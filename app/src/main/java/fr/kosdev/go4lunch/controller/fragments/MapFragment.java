@@ -20,6 +20,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -37,6 +40,8 @@ import java.util.zip.Inflater;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.kosdev.go4lunch.R;
+import fr.kosdev.go4lunch.controller.NearbyViewModel;
+import fr.kosdev.go4lunch.model.pojo.Example;
 
 
 public class MapFragment extends Fragment  {
@@ -49,23 +54,19 @@ public class MapFragment extends Fragment  {
 
 
 
-    public MapFragment() {
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        ButterKnife.bind(getActivity());
+        this.configureViewModel();
     }
-
-
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_fragment, container, false);
+        ButterKnife.bind(this, view);
+        this.configureViewModel();
 
         mapFragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
        // mapFragment.getMapAsync(this);
@@ -82,8 +83,9 @@ public class MapFragment extends Fragment  {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
 
-        return view;
+        //this.configureViewModel();
 
+        return view;
 
     }
 
@@ -128,4 +130,21 @@ public class MapFragment extends Fragment  {
         }
 
     }
+
+    private void configureViewModel(){
+
+        NearbyViewModel nearbyViewModel = new ViewModelProvider(this).get(NearbyViewModel.class);
+        nearbyViewModel.init();
+        nearbyViewModel.getNearbyRepository().observe(getActivity(), example ->{
+
+            for (int i = 0; i < example.getResults().size(); i++){
+
+                //Double lat = example.getResults().get(i).
+
+            }
+
+
+        } );
+    }
+
 }

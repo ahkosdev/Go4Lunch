@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 125;
     private String firstname;
+    private String lastname;
     private String uid;
     private String urlPicture;
 
@@ -73,10 +74,11 @@ public class MainActivity extends AppCompatActivity {
         if (this.getCurrentUser() != null){
             String uid = this.getCurrentUser().getUid();
             String firstname = this.getCurrentUser().getDisplayName();
+            String lastname = this.getCurrentUser().getDisplayName();
             String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ?
                     this.getCurrentUser().getPhotoUrl().toString():null;
 
-            WorkmateHelper.createWorkmate(uid,firstname,urlPicture);
+            WorkmateHelper.createWorkmate(uid,firstname, lastname, urlPicture);
         }
     }
 

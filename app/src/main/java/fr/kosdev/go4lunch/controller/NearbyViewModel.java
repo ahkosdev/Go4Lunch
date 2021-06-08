@@ -19,7 +19,7 @@ public class NearbyViewModel extends ViewModel {
         }
 
         nearbyRepository = NearbySearchServiceRepository.getInstance();
-        mLiveData = nearbyRepository.getData("restaurant","location", 1500);
+        mLiveData = nearbyRepository.getData("restaurant","46.232193,2.209667", 1500);
     }
     public LiveData<Example> getNearbyRepository(){
 

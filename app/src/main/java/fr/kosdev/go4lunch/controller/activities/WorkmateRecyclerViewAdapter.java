@@ -14,11 +14,6 @@ import fr.kosdev.go4lunch.model.Workmate;
 
 public class WorkmateRecyclerViewAdapter extends FirestoreRecyclerAdapter<Workmate,WorkmateViewHolder> {
 
-    public interface Listener {
-        void onDataChanged();
-    }
-
-    private Listener callback;
 
 
     public WorkmateRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<Workmate> options) {
@@ -40,9 +35,5 @@ public class WorkmateRecyclerViewAdapter extends FirestoreRecyclerAdapter<Workma
         return new WorkmateViewHolder(view);
     }
 
-    @Override
-    public void onDataChanged() {
-        super.onDataChanged();
-        this.callback.onDataChanged();
-    }
+
 }

@@ -44,7 +44,7 @@ public class WorkmateViewHolder extends RecyclerView.ViewHolder {
                 .load(workmate.getUrlPicture())
                 .apply(RequestOptions.circleCropTransform())
                 .into(workmateImage);
-        workmateTextView.setText(workmate.getFirstname());
+        workmateTextView.setText(workmate.getFirstname() +" " + "is eating");
 
 
         }
