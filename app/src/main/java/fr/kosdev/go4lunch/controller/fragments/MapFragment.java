@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +31,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -51,14 +55,10 @@ public class MapFragment extends Fragment  {
     private GoogleMap mMap;
     private FusedLocationProviderClient mLocationProviderClient;
     private SupportMapFragment mapFragment;
+    private NearbyViewModel nearbyViewModel;
 
 
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.configureViewModel();
-    }
 
 
     @Nullable
@@ -66,7 +66,6 @@ public class MapFragment extends Fragment  {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_fragment, container, false);
         ButterKnife.bind(this, view);
-        this.configureViewModel();
 
         mapFragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
        // mapFragment.getMapAsync(this);
@@ -76,14 +75,16 @@ public class MapFragment extends Fragment  {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED){
 
-            getCurrentLocation();
+           getCurrentLocation();
+            //configureViewModel();
 
         } else {
 
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
 
-        //this.configureViewModel();
+        this.configureViewModel();
+
 
         return view;
 
@@ -106,6 +107,7 @@ public class MapFragment extends Fragment  {
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+
 
                         }
                     });
@@ -131,20 +133,53 @@ public class MapFragment extends Fragment  {
 
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        try {
+
+            nearbyViewModel.getNearbyRepository().observe(getViewLifecycleOwner(), example -> {
+                for (int i = 0; i < example.getResults().size(); i++){
+
+                    Double lat = example.getResults().get(i).getGeometry().getLocation().getLatitude();
+                    Double lng = example.getResults().get(i).getGeometry().getLocation().getLongitude();
+                    String placeName = example.getResults().get(i).getName();
+                    String vicinity = example.getResults().get(i).getVicinity();
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    LatLng latLng = new LatLng(lat,lng);
+                    markerOptions.position(latLng);
+                    markerOptions.title(placeName + " : " + vicinity);
+                    mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    //markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+
+                }
+
+            });
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
+    }
+
+
     private void configureViewModel(){
 
-        NearbyViewModel nearbyViewModel = new ViewModelProvider(this).get(NearbyViewModel.class);
+        nearbyViewModel = new ViewModelProvider(this).get(NearbyViewModel.class);
         nearbyViewModel.init();
-        nearbyViewModel.getNearbyRepository().observe(getActivity(), example ->{
-
-            for (int i = 0; i < example.getResults().size(); i++){
-
-                //Double lat = example.getResults().get(i).
-
-            }
 
 
-        } );
+
     }
+
 
 }

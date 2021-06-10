@@ -2,6 +2,8 @@ package fr.kosdev.go4lunch.repositories;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.maps.GoogleMap;
+
 import fr.kosdev.go4lunch.model.pojo.Example;
 import fr.kosdev.go4lunch.network.NearbySearchApiCall;
 import retrofit2.Call;
@@ -9,6 +11,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class NearbySearchServiceRepository {
+
+    GoogleMap mMap;
+    double lat;
+    double lng;
 
     private static NearbySearchServiceRepository nearbySearchServiceRepository;
 
@@ -30,11 +36,12 @@ public class NearbySearchServiceRepository {
     public MutableLiveData<Example> getData(String type, String location, int radius){
 
         MutableLiveData<Example> nearbyData = new MutableLiveData<>();
-        nearbySearchApi.getNearbyPlace(type, location, radius).enqueue(new Callback<Example>() {
+        nearbySearchApi.getNearbyPlace(type,location, radius).enqueue(new Callback<Example>() {
             @Override
             public void onResponse(Call<Example> call, Response<Example> response) {
 
                 if (response.isSuccessful()){
+
                     nearbyData.setValue(response.body());
                 }
             }

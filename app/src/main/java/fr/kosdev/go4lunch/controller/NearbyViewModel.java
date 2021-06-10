@@ -9,6 +9,10 @@ import fr.kosdev.go4lunch.repositories.NearbySearchServiceRepository;
 
 public class NearbyViewModel extends ViewModel {
 
+     double lat;
+     double lng ;
+
+
     private MutableLiveData<Example> mLiveData;
     private NearbySearchServiceRepository nearbyRepository;
 
@@ -19,7 +23,7 @@ public class NearbyViewModel extends ViewModel {
         }
 
         nearbyRepository = NearbySearchServiceRepository.getInstance();
-        mLiveData = nearbyRepository.getData("restaurant","46.232193,2.209667", 1500);
+        mLiveData = nearbyRepository.getData("restaurant", "48,866667 , 2,333333", 1500);
     }
     public LiveData<Example> getNearbyRepository(){
 
