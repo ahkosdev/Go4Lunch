@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 import fr.kosdev.go4lunch.model.pojo.Example;
 import fr.kosdev.go4lunch.repositories.NearbySearchServiceRepository;
 
-public class NearbyViewModel extends ViewModel {
+public class ListViewViewModel extends ViewModel {
 
     private MutableLiveData<Example> mLiveData;
     private NearbySearchServiceRepository nearbyRepository;

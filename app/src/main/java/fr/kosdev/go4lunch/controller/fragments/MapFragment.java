@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.List;
 import java.util.zip.Inflater;
 
 import butterknife.BindView;
@@ -46,6 +47,7 @@ import butterknife.ButterKnife;
 import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.controller.NearbyViewModel;
 import fr.kosdev.go4lunch.model.pojo.Example;
+import fr.kosdev.go4lunch.model.pojo.Result;
 
 
 public class MapFragment extends Fragment  {
@@ -76,7 +78,7 @@ public class MapFragment extends Fragment  {
                 == PackageManager.PERMISSION_GRANTED){
 
            getCurrentLocation();
-            //configureViewModel();
+
 
         } else {
 
@@ -109,6 +111,35 @@ public class MapFragment extends Fragment  {
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
 
+                                nearbyViewModel.getNearbyRepository().observe(getViewLifecycleOwner(), example -> {
+
+                                    try {
+
+                                        mMap.clear();
+
+                                        for (int i = 0; i < example.getResults().size(); i++) {
+
+                                            Double lat = example.getResults().get(i).getGeometry().getLocation().getLat();
+                                            Double lng = example.getResults().get(i).getGeometry().getLocation().getLng();
+                                            String placeName = example.getResults().get(i).getName();
+                                            String vicinity = example.getResults().get(i).getVicinity();
+                                            MarkerOptions markerOptions = new MarkerOptions();
+                                            LatLng newLatLng = new LatLng(lat, lng);
+                                            markerOptions.position(newLatLng);
+                                            markerOptions.title(placeName + " : " + vicinity);
+                                            mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                                            //markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                                            mMap.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
+                                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLatLng, 15));
+
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    });
+
+
                         }
                     });
                 }
@@ -133,49 +164,17 @@ public class MapFragment extends Fragment  {
 
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        try {
-
-            nearbyViewModel.getNearbyRepository().observe(getViewLifecycleOwner(), example -> {
-                for (int i = 0; i < example.getResults().size(); i++){
-
-                    Double lat = example.getResults().get(i).getGeometry().getLocation().getLatitude();
-                    Double lng = example.getResults().get(i).getGeometry().getLocation().getLongitude();
-                    String placeName = example.getResults().get(i).getName();
-                    String vicinity = example.getResults().get(i).getVicinity();
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    LatLng latLng = new LatLng(lat,lng);
-                    markerOptions.position(latLng);
-                    markerOptions.title(placeName + " : " + vicinity);
-                    mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-                    //markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-
-                }
-
-            });
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-
-
-
-
-
-
-    }
-
 
     private void configureViewModel(){
 
         nearbyViewModel = new ViewModelProvider(this).get(NearbyViewModel.class);
         nearbyViewModel.init();
+
+
+
+
+
+
 
 
 
