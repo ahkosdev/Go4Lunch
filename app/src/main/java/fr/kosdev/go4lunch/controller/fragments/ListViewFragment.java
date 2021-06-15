@@ -92,28 +92,15 @@ public class ListViewFragment extends Fragment {
 
                         try {
 
-                            for (int i = 0; i < example.getResults().size(); i++) {
-
-                                Double lat = example.getResults().get(i).getGeometry().getLocation().getLat();
-                                Double lng = example.getResults().get(i).getGeometry().getLocation().getLng();
-                                String placeName = example.getResults().get(i).getName();
-                                String vicinity = example.getResults().get(i).getVicinity();
-                                List<Photo> photos = example.getResults().get(i).getPhotos();
-
-                                LatLng newLatLng = new LatLng(lat, lng);
-                                Result restaurant = new Result(placeName,newLatLng);
-                                results.add(restaurant);
-
-                                listAdapter = new ListViewAdapter(results);
-                                listAdapter.notifyDataSetChanged();
+                            results.clear();
+                            results.addAll(example.getResults());
+                            listAdapter = new ListViewAdapter(results);
 
 
-
-
-                            }
-                        } catch (Exception e) {
+                            }catch (Exception e) {
                             e.printStackTrace();
                         }
+
 
                     });
                 }
@@ -144,8 +131,8 @@ public class ListViewFragment extends Fragment {
     }
 
     private void configureRecyclerView(){
-        restaurants = new ArrayList<>();
-        listAdapter = new ListViewAdapter(restaurants);
+        results = new ArrayList<>();
+        listAdapter = new ListViewAdapter(results);
         listViewRecyclerView.setAdapter(listAdapter);
     }
 }
