@@ -94,7 +94,8 @@ public class ListViewFragment extends Fragment {
 
                             results.clear();
                             results.addAll(example.getResults());
-                            listAdapter = new ListViewAdapter(results);
+                           // listAdapter = new ListViewAdapter(results);
+                            listAdapter.notifyDataSetChanged();
 
 
                             }catch (Exception e) {

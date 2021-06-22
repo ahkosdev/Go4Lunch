@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.android.gms.maps.GoogleMap;
 
 import fr.kosdev.go4lunch.model.pojo.Example;
+import fr.kosdev.go4lunch.model.pojo_detail.ExampleDetail;
 import fr.kosdev.go4lunch.network.NearbySearchApiCall;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,5 +56,25 @@ public class NearbySearchServiceRepository {
 
         });
         return nearbyData;
+    }
+
+    public MutableLiveData<ExampleDetail> getPlaceId(String placeId){
+        MutableLiveData<ExampleDetail> detail = new MutableLiveData<>();
+        nearbySearchApi.getPlaceId(placeId).enqueue(new Callback<ExampleDetail>() {
+            @Override
+            public void onResponse(Call<ExampleDetail> call, Response<ExampleDetail> response) {
+                if (response.isSuccessful()){
+                    detail.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ExampleDetail> call, Throwable t) {
+
+                detail.setValue(null);
+
+            }
+        });
+        return detail;
     }
 }

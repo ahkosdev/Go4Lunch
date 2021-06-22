@@ -2,6 +2,7 @@ package fr.kosdev.go4lunch.controller.fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -46,6 +47,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.controller.NearbyViewModel;
+import fr.kosdev.go4lunch.controller.activities.RestaurantDetailActivity;
 import fr.kosdev.go4lunch.model.pojo.Example;
 import fr.kosdev.go4lunch.model.pojo.Result;
 
@@ -131,12 +133,29 @@ public class MapFragment extends Fragment  {
                                             //markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                                             mMap.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
                                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLatLng, 15));
+                                            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                                                @Override
+                                                public void onInfoWindowClick(@NonNull Marker marker) {
+                                                    Intent intent = new Intent(getActivity(), RestaurantDetailActivity.class);
+                                                    startActivity(intent);
+                                                }
+                                            });
+                                           // mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                                //@Override
+                                                //public boolean onMarkerClick(@NonNull Marker marker) {
 
-                                        }
+                                                   // if (marker.getTitle().equals(("placeName"))){
+                                                        //startRestaurantDetailActivity();
+                                                    }
+
+                                                   // return false;
+                                               // }
+                                           // });
+
+                                        //}
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
-
                                     });
 
 
@@ -170,13 +189,12 @@ public class MapFragment extends Fragment  {
         nearbyViewModel = new ViewModelProvider(this).get(NearbyViewModel.class);
         nearbyViewModel.init();
 
+    }
 
+    private void startRestaurantDetailActivity(){
 
-
-
-
-
-
+        Intent intent = new Intent(getActivity(), RestaurantDetailActivity.class);
+        startActivity(intent);
 
     }
 
