@@ -14,15 +14,18 @@ import fr.kosdev.go4lunch.model.Workmate;
 
 public class RestaurantDetailsAdapter extends FirestoreRecyclerAdapter<Workmate, RestaurantDetailsViewHolder> {
 
+    private String idCurrentWorkmate;
 
-    public RestaurantDetailsAdapter(@NonNull FirestoreRecyclerOptions<Workmate> options) {
+
+    public RestaurantDetailsAdapter(@NonNull FirestoreRecyclerOptions<Workmate> options, String idCurrentWorkmate) {
         super(options);
+        this.idCurrentWorkmate = idCurrentWorkmate;
     }
 
     @Override
     protected void onBindViewHolder(@NonNull RestaurantDetailsViewHolder holder, int position, @NonNull Workmate workmate) {
 
-        holder.showDetails(workmate);
+        holder.showDetails(workmate, idCurrentWorkmate);
 
     }
 

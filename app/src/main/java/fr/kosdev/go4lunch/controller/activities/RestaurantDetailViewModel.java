@@ -12,6 +12,8 @@ public class RestaurantDetailViewModel extends ViewModel {
 
     private MutableLiveData<ExampleDetail> detailLiveData;
     private NearbySearchServiceRepository detailRepository;
+    private ExampleDetail example;
+
 
     public void init(){
 
@@ -19,11 +21,12 @@ public class RestaurantDetailViewModel extends ViewModel {
             return;
         }
 
-        detailRepository = NearbySearchServiceRepository.getInstance();
-        detailLiveData = detailRepository.getPlaceId("placeId");
-    }
-    public LiveData<ExampleDetail> getDetailLiveData(){
 
+    }
+    public LiveData<ExampleDetail> getDetailLiveData(String placeId){
+
+        detailRepository = NearbySearchServiceRepository.getInstance();
+        detailLiveData = detailRepository.getPlaceId(placeId);
         return detailLiveData;
     }
 }

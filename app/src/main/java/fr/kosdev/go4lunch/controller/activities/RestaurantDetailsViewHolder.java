@@ -28,8 +28,8 @@ public class RestaurantDetailsViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void showDetails(Workmate workmate){
-
+    public void showDetails(Workmate workmate, String currentWorkmateId){
+        currentWorkmateId = workmate.getUid();
         Glide.with(restaurantImage.getContext())
                 .load(workmate.getUrlPicture())
                 .apply(RequestOptions.circleCropTransform())

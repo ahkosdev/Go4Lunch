@@ -61,7 +61,6 @@ public class ListViewViewHolder extends ViewHolder {
 
                 Glide.with(restaurantImage.getContext())
                         .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=400&photoreference="+ restaurantPhoto +"&key=AIzaSyBk1fsJRc21Wlt0usxn_UtjPhY2waPqiRE")
-                        //.apply(RequestOptions.circleCropTransform())
                         .into(restaurantImage);
 
             }

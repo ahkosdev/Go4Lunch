@@ -6,21 +6,36 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DownloadManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.firestore.ObservableSnapshotArray;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.api.WorkmateHelper;
 import fr.kosdev.go4lunch.model.Workmate;
 import fr.kosdev.go4lunch.model.pojo_detail.ExampleDetail;
 import fr.kosdev.go4lunch.model.pojo_detail.Result;
+
+import static com.google.firebase.auth.FirebaseAuth.getInstance;
 
 public class RestaurantDetailActivity extends AppCompatActivity {
 
@@ -30,12 +45,19 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     TextView restaurantVicinity;
     @BindView(R.id.restaurant_detail_img)
     ImageView restaurantImage;
+    @BindView(R.id.call_button)
+    ImageButton callButton;
+    @BindView(R.id.website_button)
+    ImageButton webImage;
     @BindView(R.id.restaurant_detail_rcv)
     RecyclerView restaurantDetailRcv;
 
     private RestaurantDetailsAdapter restaurantAdapter;
     private Result result;
     private RestaurantDetailViewModel restaurantViewModel;
+    private String phoneNumber;
+    private String restaurantUrl;
+    private Workmate currentWorkmate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,19 +65,16 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_restaurant_detail);
         ButterKnife.bind(this);
         this.configureRecyclerView();
+        this.configureViewModel();
+        this.getPlaceIdAndUpdateUI();
     }
 
 
     private void configureRecyclerView(){
 
-        restaurantAdapter = new RestaurantDetailsAdapter(getOptionForAdapter(WorkmateHelper.getWorkmates()));
+        restaurantAdapter = new RestaurantDetailsAdapter(getOptionForAdapter(WorkmateHelper.getWorkmate(FirebaseAuth.getInstance().getCurrentUser().getUid()));
         restaurantDetailRcv.setAdapter(restaurantAdapter);
 
-    }
-
-    private void configureViewModel(){
-        restaurantViewModel = new ViewModelProvider(this).get(RestaurantDetailViewModel.class);
-        restaurantViewModel.init();
     }
 
     private FirestoreRecyclerOptions<Workmate> getOptionForAdapter(Query query){
@@ -66,6 +85,26 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                 .build();
     }
 
+    private void getCurrentWorkmateFromFireStore(){
+        WorkmateHelper.getWorkmate(getInstance().getCurrentUser().getUid())
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                currentWorkmate = documentSnapshot.toObject(Workmate.class);
+
+            }
+        });
+    }
+
+    private FirebaseUser getCurrentWorkmate(){
+        return getInstance().getCurrentUser();
+    }
+
+    private void configureViewModel(){
+        restaurantViewModel = new ViewModelProvider(this).get(RestaurantDetailViewModel.class);
+        restaurantViewModel.init();
+    }
+
     private void getPlaceIdAndUpdateUI(){
 
         Intent intent = getIntent();
@@ -73,12 +112,42 @@ public class RestaurantDetailActivity extends AppCompatActivity {
            // String placeId = "";
             if (intent.hasExtra("KEY_DETAIL")){
                String placeId = intent.getStringExtra("KEY_DETAIL");
-               if (placeId != null && placeId == result.getPlaceId() ){
-                   restaurantViewModel.getDetailLiveData().observe(this, exampleDetail -> {
+                   restaurantViewModel.getDetailLiveData(placeId).observe(this, exampleDetail -> {
                        restaurantName.setText(exampleDetail.getResult().getName());
+                       restaurantVicinity.setText(exampleDetail.getResult().getVicinity());
+                       String photoReference = exampleDetail.getResult().getPhotos().get(0).getPhotoReference();
+                       if (photoReference != null)
+                       Glide.with(restaurantImage.getContext())
+                               .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=600&photoreference="+ photoReference +"&key=AIzaSyBk1fsJRc21Wlt0usxn_UtjPhY2waPqiRE")
+                               .into(restaurantImage);
+                       callButton.setOnClickListener(new View.OnClickListener() {
+                           @Override
+                           public void onClick(View v) {
+                               phoneNumber = exampleDetail.getResult().getFormattedPhoneNumber();
+                               Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                               callIntent.setData(Uri.parse("tel:" + phoneNumber));
+                               if (callIntent.resolveActivity(getPackageManager()) != null){
+                                   startActivity(callIntent);
+                               }
+                           }
+                       });
+
+                       webImage.setOnClickListener(new View.OnClickListener() {
+                           @Override
+                           public void onClick(View v) {
+                               restaurantUrl = exampleDetail.getResult().getWebsite();
+                               Uri webPage = Uri.parse(restaurantUrl);
+                               Intent webIntent = new Intent(Intent.ACTION_VIEW, webPage);
+                               if (webIntent.resolveActivity(getPackageManager()) != null){
+                                   startActivity(webIntent);
+                               }
+                           }
+                       });
+
+
                    });
 
-               }
+
             }
         }
     }
