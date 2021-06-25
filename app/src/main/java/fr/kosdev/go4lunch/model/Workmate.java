@@ -3,16 +3,20 @@ package fr.kosdev.go4lunch.model;
 public class Workmate {
     private String uid;
     private String firstname;
-    private  String lastname;
+    private String placeId;
     private String urlPicture;
+    private String restaurantName;
+    private String restaurantAddress;
 
     public Workmate(){}
 
-    public Workmate(String uid, String firstname, String lastname, String urlPicture) {
+    public Workmate(String uid, String firstname, String urlPicture, String placeId, String restaurantName, String restaurantAddress) {
         this.uid = uid;
         this.firstname = firstname;
-        this.lastname = lastname;
         this.urlPicture = urlPicture;
+        this.placeId = placeId;
+        this.restaurantName = restaurantName;
+        this.restaurantAddress = restaurantAddress;
     }
 
     public String getUid() {
@@ -39,11 +43,28 @@ public class Workmate {
         this.firstname = firstname;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getPlaceId() {
+        return placeId;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
+    }
+
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
+    public String getRestaurantAddress() {
+        return restaurantAddress;
+    }
+
+    public void setRestaurantAddress(String restaurantAddress) {
+        this.restaurantAddress = restaurantAddress;
     }
 }
+

@@ -156,7 +156,7 @@
 </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/choose_restaurant_btn"
+        android:id="@+id/restaurant_detail_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"

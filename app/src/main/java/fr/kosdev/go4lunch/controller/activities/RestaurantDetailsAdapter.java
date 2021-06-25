@@ -17,15 +17,14 @@ public class RestaurantDetailsAdapter extends FirestoreRecyclerAdapter<Workmate,
     private String idCurrentWorkmate;
 
 
-    public RestaurantDetailsAdapter(@NonNull FirestoreRecyclerOptions<Workmate> options, String idCurrentWorkmate) {
+    public RestaurantDetailsAdapter(@NonNull FirestoreRecyclerOptions<Workmate> options) {
         super(options);
-        this.idCurrentWorkmate = idCurrentWorkmate;
     }
 
     @Override
     protected void onBindViewHolder(@NonNull RestaurantDetailsViewHolder holder, int position, @NonNull Workmate workmate) {
 
-        holder.showDetails(workmate, idCurrentWorkmate);
+        holder.showDetails(workmate);
 
     }
 

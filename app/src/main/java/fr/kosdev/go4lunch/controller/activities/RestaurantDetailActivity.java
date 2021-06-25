@@ -20,6 +20,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.firebase.ui.firestore.ObservableSnapshotArray;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -49,6 +50,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     ImageButton callButton;
     @BindView(R.id.website_button)
     ImageButton webImage;
+    @BindView(R.id.restaurant_detail_fab)
+    FloatingActionButton restaurantFab;
     @BindView(R.id.restaurant_detail_rcv)
     RecyclerView restaurantDetailRcv;
 
@@ -57,7 +60,9 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private RestaurantDetailViewModel restaurantViewModel;
     private String phoneNumber;
     private String restaurantUrl;
-    private Workmate currentWorkmate;
+    private FirebaseUser currentWorkmate;
+    private String placeId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +77,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
     private void configureRecyclerView(){
 
-        restaurantAdapter = new RestaurantDetailsAdapter(getOptionForAdapter(WorkmateHelper.getWorkmate(FirebaseAuth.getInstance().getCurrentUser().getUid()));
+        restaurantAdapter = new RestaurantDetailsAdapter(getOptionForAdapter(WorkmateHelper.getWorkmatesWithPlaceId()));
         restaurantDetailRcv.setAdapter(restaurantAdapter);
 
     }
@@ -85,20 +90,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                 .build();
     }
 
-    private void getCurrentWorkmateFromFireStore(){
-        WorkmateHelper.getWorkmate(getInstance().getCurrentUser().getUid())
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                currentWorkmate = documentSnapshot.toObject(Workmate.class);
-
-            }
-        });
-    }
-
-    private FirebaseUser getCurrentWorkmate(){
-        return getInstance().getCurrentUser();
-    }
 
     private void configureViewModel(){
         restaurantViewModel = new ViewModelProvider(this).get(RestaurantDetailViewModel.class);
@@ -109,7 +100,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null){
-           // String placeId = "";
             if (intent.hasExtra("KEY_DETAIL")){
                String placeId = intent.getStringExtra("KEY_DETAIL");
                    restaurantViewModel.getDetailLiveData(placeId).observe(this, exampleDetail -> {
@@ -144,6 +134,17 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                            }
                        });
 
+                       restaurantFab.setOnClickListener(new View.OnClickListener() {
+                           @Override
+                           public void onClick(View v) {
+                               currentWorkmate = FirebaseAuth.getInstance().getCurrentUser();
+                               String restaurantName = exampleDetail.getResult().getName();
+                               String restaurantAddress = exampleDetail.getResult().getVicinity();
+                               WorkmateHelper.updatePlaceId(placeId,currentWorkmate.getUid());
+                               WorkmateHelper.updateRestaurantName(restaurantName,currentWorkmate.getUid());
+                               WorkmateHelper.updateRestaurantAddress(restaurantAddress,currentWorkmate.getUid());
+                           }
+                       });
 
                    });
 
@@ -151,4 +152,5 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             }
         }
     }
+
 }

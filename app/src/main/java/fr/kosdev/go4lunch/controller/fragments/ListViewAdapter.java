@@ -23,9 +23,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewViewHolder> {
 
 
     private List<Result> mResults;
-    private List<Restaurant> mRestaurants;
     private String placeId;
-    private ExampleDetail example;
 
     public ListViewAdapter( List<Result> results) {
         this.mResults = results;

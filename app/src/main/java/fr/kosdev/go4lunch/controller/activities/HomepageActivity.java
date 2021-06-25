@@ -81,10 +81,12 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
                     case R.id.listView_action:
                         selectedFragment = new ListViewFragment();
+                        mToolbar.setTitle("I'm Hungry");
                         break;
 
                     case R.id.workmates_action:
                         selectedFragment = new WorkmatesFragment();
+                        mToolbar.setTitle("Available Workmates");
                         break;
 
                 }

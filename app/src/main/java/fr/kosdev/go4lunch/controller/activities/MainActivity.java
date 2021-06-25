@@ -74,11 +74,13 @@ public class MainActivity extends AppCompatActivity {
         if (this.getCurrentUser() != null){
             String uid = this.getCurrentUser().getUid();
             String firstname = this.getCurrentUser().getDisplayName();
-            String lastname = this.getCurrentUser().getDisplayName();
             String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ?
                     this.getCurrentUser().getPhotoUrl().toString():null;
+            String placeId = "";
+            String restaurantName = "";
+            String restaurantAddress = "";
 
-            WorkmateHelper.createWorkmate(uid,firstname, lastname, urlPicture);
+            WorkmateHelper.createWorkmate(uid,firstname,urlPicture,placeId,restaurantName,restaurantAddress);
         }
     }
 
