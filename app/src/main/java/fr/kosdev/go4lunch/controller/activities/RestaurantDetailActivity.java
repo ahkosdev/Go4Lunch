@@ -32,6 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.api.WorkmateHelper;
+import fr.kosdev.go4lunch.controller.fragments.WorkmatesFragment;
 import fr.kosdev.go4lunch.model.Workmate;
 import fr.kosdev.go4lunch.model.pojo_detail.ExampleDetail;
 import fr.kosdev.go4lunch.model.pojo_detail.Result;
@@ -61,7 +62,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private String phoneNumber;
     private String restaurantUrl;
     private FirebaseUser currentWorkmate;
-    private String placeId;
 
 
     @Override
@@ -77,8 +77,15 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
     private void configureRecyclerView(){
 
-        restaurantAdapter = new RestaurantDetailsAdapter(getOptionForAdapter(WorkmateHelper.getWorkmatesWithPlaceId()));
-        restaurantDetailRcv.setAdapter(restaurantAdapter);
+        Intent intent = getIntent();
+        if (intent != null){
+            if (intent.hasExtra("KEY_DETAIL")){
+                String placeId = intent.getStringExtra("KEY_DETAIL");
+                restaurantAdapter = new RestaurantDetailsAdapter(getOptionForAdapter(WorkmateHelper.getWorkmatesWithPlaceId(placeId)));
+                restaurantDetailRcv.setAdapter(restaurantAdapter);
+            }
+        }
+
 
     }
 
@@ -143,6 +150,9 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                                WorkmateHelper.updatePlaceId(placeId,currentWorkmate.getUid());
                                WorkmateHelper.updateRestaurantName(restaurantName,currentWorkmate.getUid());
                                WorkmateHelper.updateRestaurantAddress(restaurantAddress,currentWorkmate.getUid());
+                               Intent restaurantNameIntent = new Intent(v.getContext(), WorkmatesFragment.class);
+                               restaurantNameIntent.putExtra("KEY_NAME", restaurantName);
+
                            }
                        });
 

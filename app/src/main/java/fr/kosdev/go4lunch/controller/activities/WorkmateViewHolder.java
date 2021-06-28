@@ -1,5 +1,6 @@
 package fr.kosdev.go4lunch.controller.activities;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;

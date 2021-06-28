@@ -14,7 +14,6 @@ import fr.kosdev.go4lunch.model.Workmate;
 
 public class RestaurantDetailsAdapter extends FirestoreRecyclerAdapter<Workmate, RestaurantDetailsViewHolder> {
 
-    private String idCurrentWorkmate;
 
 
     public RestaurantDetailsAdapter(@NonNull FirestoreRecyclerOptions<Workmate> options) {
