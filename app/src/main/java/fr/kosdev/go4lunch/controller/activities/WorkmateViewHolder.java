@@ -41,11 +41,12 @@ public class WorkmateViewHolder extends RecyclerView.ViewHolder {
 
     public void updateUIWhenCreating(Workmate workmate){
 
+
         Glide.with(workmateImage.getContext())
                 .load(workmate.getUrlPicture())
                 .apply(RequestOptions.circleCropTransform())
                 .into(workmateImage);
-        workmateTextView.setText(workmate.getFirstname() +" " + "is eating");
+        workmateTextView.setText(workmate.getFirstname() +" " + "is eating" + " "+ ( workmate.getRestaurantName()));
 
 
         }

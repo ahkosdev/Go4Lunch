@@ -39,9 +39,6 @@ public class WorkmateHelper {
         return getWorkmates().whereEqualTo("placeId", placeId);
     }
 
-    public static Task<QuerySnapshot> getRestaurantName(String restaurantName){
-        return getWorkmates().whereEqualTo("restaurantName",restaurantName).get();
-    }
 
     public static Task<Void> createWorkmate(String uid, String firstname, String urlPicture, String placeId, String restaurantName, String restaurantAddress){
 

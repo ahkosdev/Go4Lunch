@@ -150,8 +150,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                                WorkmateHelper.updatePlaceId(placeId,currentWorkmate.getUid());
                                WorkmateHelper.updateRestaurantName(restaurantName,currentWorkmate.getUid());
                                WorkmateHelper.updateRestaurantAddress(restaurantAddress,currentWorkmate.getUid());
-                               Intent restaurantNameIntent = new Intent(v.getContext(), WorkmatesFragment.class);
-                               restaurantNameIntent.putExtra("KEY_NAME", restaurantName);
 
                            }
                        });
