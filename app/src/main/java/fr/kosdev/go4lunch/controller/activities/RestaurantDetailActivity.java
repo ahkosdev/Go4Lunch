@@ -72,6 +72,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         this.configureRecyclerView();
         this.configureViewModel();
         this.getPlaceIdAndUpdateUI();
+        this.updateUIWithCurrentWorkmatePlaceId();
     }
 
 
@@ -157,6 +158,45 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                    });
 
 
+            }
+        }
+    }
+    private void updateUIWithCurrentWorkmatePlaceId(){
+        Intent intent = getIntent();
+        if (intent != null){
+            if (intent.hasExtra("CURRENT_KEY")){
+                String placeId = intent.getStringExtra("CURRENT_KEY");
+                restaurantViewModel.getDetailLiveData(placeId).observe(this, exampleDetail -> {
+                    restaurantName.setText(exampleDetail.getResult().getName());
+                    restaurantVicinity.setText(exampleDetail.getResult().getVicinity());
+                    String photoReference = exampleDetail.getResult().getPhotos().get(0).getPhotoReference();
+                    if (photoReference != null)
+                        Glide.with(restaurantImage.getContext())
+                                .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=600&photoreference="+ photoReference +"&key=AIzaSyBk1fsJRc21Wlt0usxn_UtjPhY2waPqiRE")
+                                .into(restaurantImage);
+                    callButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            phoneNumber = exampleDetail.getResult().getFormattedPhoneNumber();
+                            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                            callIntent.setData(Uri.parse("tel:" + phoneNumber));
+                            if (callIntent.resolveActivity(getPackageManager()) != null){
+                                startActivity(callIntent);
+                            }
+                        }
+                    });
+                    webImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            restaurantUrl = exampleDetail.getResult().getWebsite();
+                            Uri webPage = Uri.parse(restaurantUrl);
+                            Intent webIntent = new Intent(Intent.ACTION_VIEW, webPage);
+                            if (webIntent.resolveActivity(getPackageManager()) != null){
+                                startActivity(webIntent);
+                            }
+                        }
+                    });
+                });
             }
         }
     }

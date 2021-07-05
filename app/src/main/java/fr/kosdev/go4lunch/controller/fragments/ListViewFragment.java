@@ -135,5 +135,6 @@ public class ListViewFragment extends Fragment {
         results = new ArrayList<>();
         listAdapter = new ListViewAdapter(results);
         listViewRecyclerView.setAdapter(listAdapter);
+        listViewRecyclerView.setHasFixedSize(true);
     }
 }

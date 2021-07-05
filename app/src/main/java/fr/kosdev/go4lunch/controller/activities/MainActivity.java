@@ -19,10 +19,6 @@ import fr.kosdev.go4lunch.api.WorkmateHelper;
 public class MainActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 125;
-    private String firstname;
-    private String lastname;
-    private String uid;
-    private String urlPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         this.handleResponseAfterSignIn(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.startSigningActivity();
     }
 
     private void startSigningActivity(){

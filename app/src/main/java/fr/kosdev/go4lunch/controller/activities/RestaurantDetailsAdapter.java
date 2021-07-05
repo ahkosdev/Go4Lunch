@@ -23,7 +23,7 @@ public class RestaurantDetailsAdapter extends FirestoreRecyclerAdapter<Workmate,
     @Override
     protected void onBindViewHolder(@NonNull RestaurantDetailsViewHolder holder, int position, @NonNull Workmate workmate) {
 
-        holder.showDetails(workmate);
+        holder.showDetails(workmate, holder.itemView.getContext());
 
     }
 

@@ -129,30 +129,34 @@ public class MapFragment extends Fragment  {
                                             LatLng newLatLng = new LatLng(lat, lng);
                                             markerOptions.position(newLatLng);
                                             markerOptions.title(placeName + " : " + vicinity);
-                                            mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                                            mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
+                                                    .setTag(example.getResults().get(i).getPlaceId());
                                             //markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                                             mMap.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
                                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLatLng, 15));
                                             mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                                                 @Override
                                                 public void onInfoWindowClick(@NonNull Marker marker) {
+                                                    String placeId = (String) marker.getTag();
                                                     Intent intent = new Intent(getActivity(), RestaurantDetailActivity.class);
+                                                    intent.putExtra("KEY_DETAIL", placeId);
                                                     startActivity(intent);
                                                 }
                                             });
-                                           // mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                                                //@Override
-                                                //public boolean onMarkerClick(@NonNull Marker marker) {
+                                            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                                @Override
+                                                public boolean onMarkerClick(@NonNull Marker marker) {
+                                                    String placeId = (String) marker.getTag();
+                                                    Intent intent = new Intent(getActivity(), RestaurantDetailActivity.class);
+                                                    intent.putExtra("KEY_DETAIL", placeId);
+                                                    startActivity(intent);
 
-                                                   // if (marker.getTitle().equals(("placeName"))){
-                                                        //startRestaurantDetailActivity();
-                                                    }
 
-                                                   // return false;
-                                               // }
-                                           // });
+                                                    return false;
+                                               }
+                                            });
 
-                                        //}
+                                        }
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }

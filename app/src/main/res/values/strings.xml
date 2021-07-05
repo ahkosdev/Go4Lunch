@@ -18,4 +18,7 @@
 
     <string name="error_unknown_error">Une erreur inconnue s\'est produite&#8230;</string>
     <string name="info_no_username_found">Aucun nom d\'utilisateur</string>
+    <string name="info_no_email_found">Auncune adresse email</string>
+
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 </resources>

@@ -1,6 +1,7 @@
 package fr.kosdev.go4lunch.controller.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -46,7 +47,13 @@ public class WorkmateViewHolder extends RecyclerView.ViewHolder {
                 .load(workmate.getUrlPicture())
                 .apply(RequestOptions.circleCropTransform())
                 .into(workmateImage);
-        workmateTextView.setText(workmate.getFirstname() +" " + "is eating" + " "+ ( workmate.getRestaurantName()));
+        if (workmate.getRestaurantName() != null){
+            workmateTextView.setText(workmate.getFirstname() +" " + "is eating" + " "+ "("+( workmate.getRestaurantName())+")");
+
+        }else {
+            workmateTextView.setText(workmate.getFirstname() + " " + "hasn't decided yet");
+            workmateTextView.setTextColor(Color.parseColor("#b9b2b2"));
+        }
 
 
         }

@@ -1,5 +1,6 @@
 package fr.kosdev.go4lunch.controller.activities;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,8 +29,8 @@ public class RestaurantDetailsViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void showDetails(Workmate workmate){
-        Glide.with(restaurantImage.getContext())
+    public void showDetails(Workmate workmate, Context context){
+        Glide.with(context)
                 .load(workmate.getUrlPicture())
                 .apply(RequestOptions.circleCropTransform())
                 .into(restaurantImage);
