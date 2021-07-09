@@ -47,7 +47,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="8dp"
                 app:srcCompat="@drawable/ic_baseline_star_24"
-                android:tint="@color/colorAccent"/>
+                app:tint="@color/colorAccent" />
 
         </LinearLayout>
 
@@ -111,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="CALL"
+                android:text="@string/call_text"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:textColor="#FF5D31"
@@ -121,7 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="LIKE"
+                android:text="@string/like_text"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:textColor="#FF5D31"
@@ -132,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="WEBSITE"
+                android:text="@string/website_text"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:textColor="#FF5D31"

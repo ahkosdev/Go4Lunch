@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Go4Lunch</string>
+    <string name="map_toolbar_title">J\'ai Faim</string>
+    <string name="workmate_toolbar_title">Collègues Connectés</string>
+    <string name="choice_text">mange au</string>
+    <string name="no_choice_text">ne s\'est pas encore décidé(e)</string>
+    <string name="open_text">Ouvert</string>
+    <string name="close_text">Fermé</string>
+    <string name="call_text">APPEL</string>
+    <string name="like_text">AIMER</string>
+    <string name="website_text">SITE WEB</string>
+    <string name="lunch_text">TON DEJEUNER</string>
+    <string name="setting_text">PARAMETRE</string>
+    <string name="logout_text">DECONNECTER</string>
+    <string name="bottom_navigation_menu_workmates">Collègues</string>
+    <string name="bottom_navigation_menu_listView">Restaurant</string>
+    <string name="bottom_navigation_menu_mapView">Carte</string>
+    <string name="error_unknown_error">Une erreur inconnue s\'est produite</string>
+    <string name="info_no_username_found">Aucun nom d\'utilisateur</string>
+    <string name="info_no_email_found">Aucune adresse email</string>
+    <string name="joining_text">y mange aussi</string>
+    <string name="notification_text">Tu manges au</string>
+</resources>

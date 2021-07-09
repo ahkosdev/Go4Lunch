@@ -1,5 +1,6 @@
 package fr.kosdev.go4lunch.network;
 
+import fr.kosdev.go4lunch.model.autocomplete.AutocompletResult;
 import fr.kosdev.go4lunch.model.pojo.Example;
 import fr.kosdev.go4lunch.model.pojo_detail.ExampleDetail;
 import retrofit2.Call;
@@ -16,8 +17,12 @@ public interface NearbySearchApiCall {
     @GET("api/place/details/json?key=AIzaSyBk1fsJRc21Wlt0usxn_UtjPhY2waPqiRE")
     Call<ExampleDetail> getPlaceId(@Query("place_id")  String placeId);
 
+    @GET("api/place/autocomplete/json?key=AIzaSyBk1fsJRc21Wlt0usxn_UtjPhY2waPqiRE&types=establishment&radius=1500&strictbounds")
+    Call<AutocompletResult> getRestaurantsWithAutocomplete(@Query("input") String input, @Query("location") String location);
+
     public static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://maps.googleapis.com/maps/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
+
 }

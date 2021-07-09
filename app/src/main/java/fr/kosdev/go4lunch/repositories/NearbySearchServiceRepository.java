@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.maps.GoogleMap;
 
+import fr.kosdev.go4lunch.model.autocomplete.AutocompletResult;
 import fr.kosdev.go4lunch.model.pojo.Example;
 import fr.kosdev.go4lunch.model.pojo_detail.ExampleDetail;
 import fr.kosdev.go4lunch.network.NearbySearchApiCall;
@@ -13,9 +14,6 @@ import retrofit2.Response;
 
 public class NearbySearchServiceRepository {
 
-    GoogleMap mMap;
-    double lat;
-    double lng;
 
     private static NearbySearchServiceRepository nearbySearchServiceRepository;
 
@@ -76,5 +74,26 @@ public class NearbySearchServiceRepository {
             }
         });
         return detail;
+    }
+
+    public MutableLiveData<AutocompletResult> getAutocompleteInputText(String input, String location){
+        MutableLiveData<AutocompletResult> autocompleteData = new MutableLiveData<>();
+        nearbySearchApi.getRestaurantsWithAutocomplete(input, location).enqueue(new Callback<AutocompletResult>() {
+            @Override
+            public void onResponse(Call<AutocompletResult> call, Response<AutocompletResult> response) {
+                if (response.isSuccessful()){
+                    autocompleteData.setValue(response.body());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<AutocompletResult> call, Throwable t) {
+                autocompleteData.setValue(null);
+
+            }
+        });
+        return autocompleteData;
+
     }
 }

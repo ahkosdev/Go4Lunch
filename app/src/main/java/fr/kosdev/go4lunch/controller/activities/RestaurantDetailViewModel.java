@@ -12,15 +12,12 @@ public class RestaurantDetailViewModel extends ViewModel {
 
     private MutableLiveData<ExampleDetail> detailLiveData;
     private NearbySearchServiceRepository detailRepository;
-    private ExampleDetail example;
-
 
     public void init(){
 
         if (detailLiveData != null){
             return;
         }
-
 
     }
     public LiveData<ExampleDetail> getDetailLiveData(String placeId){

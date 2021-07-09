@@ -6,17 +6,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -35,6 +43,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.api.WorkmateHelper;
+import fr.kosdev.go4lunch.controller.NearbyViewModel;
 import fr.kosdev.go4lunch.controller.fragments.ListViewFragment;
 import fr.kosdev.go4lunch.controller.fragments.LogoutFragment;
 import fr.kosdev.go4lunch.controller.fragments.LunchFragment;
@@ -57,6 +66,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
     private Fragment settingFragment;
     private static final int SETTING_FRAGMENT = 1;
     private static final int LOGOUT_EVENT = 2;
+    private NearbyViewModel autocompleteView;
 
 
     @Override
@@ -84,17 +94,17 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
                     case R.id.map_action:
                         selectedFragment = new MapFragment();
-                        mToolbar.setTitle("I'm Hungry");
+                        mToolbar.setTitle(R.string.map_toolbar_title);
                         break;
 
                     case R.id.listView_action:
                         selectedFragment = new ListViewFragment();
-                        mToolbar.setTitle("I'm Hungry");
+                        mToolbar.setTitle(R.string.map_toolbar_title);
                         break;
 
                     case R.id.workmates_action:
                         selectedFragment = new WorkmatesFragment();
-                        mToolbar.setTitle("Available Workmates");
+                        mToolbar.setTitle(R.string.workmate_toolbar_title);
                         break;
 
                 }
@@ -240,4 +250,29 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.search_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.search_menu);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                autocompleteView.getAutocompleteResult(newText,"46.6743,4.3634").observe(this, autocompletResult -> {
+
+                });
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
 }

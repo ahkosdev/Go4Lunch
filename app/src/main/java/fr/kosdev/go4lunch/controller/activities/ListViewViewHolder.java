@@ -80,9 +80,9 @@ public class ListViewViewHolder extends ViewHolder {
         OpeningHours openingHours = result.getOpeningHours();
         if (openingHours != null){
             if (result.getOpeningHours().getOpenNow()== true){
-                restaurantOpenHours.setText("ouvert");
+                restaurantOpenHours.setText(R.string.open_text);
             }else {
-                restaurantOpenHours.setText("Fermé");
+                restaurantOpenHours.setText(R.string.close_text);
             }
         }
 

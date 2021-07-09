@@ -34,7 +34,7 @@ public class RestaurantDetailsViewHolder extends RecyclerView.ViewHolder {
                 .load(workmate.getUrlPicture())
                 .apply(RequestOptions.circleCropTransform())
                 .into(restaurantImage);
-        restaurantName.setText(workmate.getFirstname() + " " + "is joining");
+        restaurantName.setText(workmate.getFirstname() + " " + restaurantName.getContext().getResources().getString(R.string.joining_text));
 
     }
 }
