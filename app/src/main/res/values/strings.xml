@@ -3,6 +3,8 @@
 
     <string name="facebook_application_id" translatable="false">982420739231162</string>
     <string name="fb_login_protocol_scheme" translatable="false" tools:ignore="UnusedResources">fb982420739231162</string>
+    <string name="consumer_key" translatable="false">qtOyyZAgf5ue5DOrrhJ7hBZN7</string>
+    <string name="consumer_secret" translatable="false">kV9SSoXtjMbbqao0K0D8TgHl19fI7RSK77ZPZDNVt5doXKoPoP</string>
     <string name="location_permission_denied" translatable="false">value</string>
     <string name="permission_required_toast" translatable="false"/>
     <string name="permission_rationale_location" translatable="false">value</string>

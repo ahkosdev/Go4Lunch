@@ -10,6 +10,9 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterConfig;
 
 import java.util.Arrays;
 
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.startSigningActivity();
+        this.configureTwitterAuth();
     }
 
     @Override
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 .setAvailableProviders(Arrays.asList(
                         new AuthUI.IdpConfig.GoogleBuilder().build(),
                          new AuthUI.IdpConfig.FacebookBuilder().build(),
+                         new AuthUI.IdpConfig.TwitterBuilder().build(),
                          new AuthUI.IdpConfig.EmailBuilder().build() ))
                 .setIsSmartLockEnabled(false, true)
                 .build(), RC_SIGN_IN );
@@ -84,6 +89,12 @@ public class MainActivity extends AppCompatActivity {
 
             WorkmateHelper.createWorkmate(uid,firstname,urlPicture,placeId,restaurantName,restaurantAddress);
         }
+    }
+
+    private void configureTwitterAuth(){
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(getString(R.string.consumer_key), getString(R.string.consumer_secret));
+        TwitterConfig twitterConfig = new TwitterConfig.Builder(this).twitterAuthConfig(authConfig).build();
+        Twitter.initialize(twitterConfig);
     }
 
 

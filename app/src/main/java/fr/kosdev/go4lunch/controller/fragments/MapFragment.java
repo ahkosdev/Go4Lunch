@@ -202,5 +202,9 @@ public class MapFragment extends Fragment  {
 
     }
 
+    public void configureAutocomplete(){
+
+    }
+
 
 }

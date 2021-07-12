@@ -9,28 +9,22 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
 
-import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
@@ -45,8 +39,6 @@ import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.api.WorkmateHelper;
 import fr.kosdev.go4lunch.controller.NearbyViewModel;
 import fr.kosdev.go4lunch.controller.fragments.ListViewFragment;
-import fr.kosdev.go4lunch.controller.fragments.LogoutFragment;
-import fr.kosdev.go4lunch.controller.fragments.LunchFragment;
 import fr.kosdev.go4lunch.controller.fragments.MapFragment;
 import fr.kosdev.go4lunch.controller.fragments.SettingFragment;
 import fr.kosdev.go4lunch.controller.fragments.WorkmatesFragment;
@@ -67,6 +59,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
     private static final int SETTING_FRAGMENT = 1;
     private static final int LOGOUT_EVENT = 2;
     private NearbyViewModel autocompleteView;
+    MapFragment mapFragment;
 
 
     @Override
@@ -80,6 +73,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         this.configureDrawerLayout();
         this.updateProfileUI();
         getSupportFragmentManager().beginTransaction().add(R.id.homepage_frame_layout, new MapFragment()).commit();
+        autocompleteView = new ViewModelProvider(this).get(NearbyViewModel.class);
 
     }
 
@@ -245,6 +239,7 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                 Intent intent = new Intent(getApplicationContext(), RestaurantDetailActivity.class);
                 intent.putExtra("CURRENT_KEY", placeId );
                 startActivity(intent);
+
             }
         });
 
@@ -265,14 +260,20 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                callAutocomplete(newText);
 
-                autocompleteView.getAutocompleteResult(newText,"46.6743,4.3634").observe(this, autocompletResult -> {
-
-                });
                 return false;
             }
         });
 
         return super.onCreateOptionsMenu(menu);
     }
+
+    private void callAutocomplete(String input){
+        autocompleteView.getAutocompleteResult(input,"46.6743,4.3634").observe(this, autocompleteResult -> {
+            autocompleteResult.getPredictions();
+        });
+    }
+
+
 }

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import fr.kosdev.go4lunch.model.autocomplete.AutocompletResult;
+import fr.kosdev.go4lunch.model.autocomplete.AutocompleteResult;
 import fr.kosdev.go4lunch.model.pojo.Example;
 import fr.kosdev.go4lunch.repositories.NearbySearchServiceRepository;
 
@@ -12,7 +12,7 @@ public class NearbyViewModel extends ViewModel {
 
     private MutableLiveData<Example> mLiveData;
     private NearbySearchServiceRepository nearbyRepository;
-    private MutableLiveData<AutocompletResult> autocompleteLiveData;
+    private MutableLiveData<AutocompleteResult> autocompleteLiveData;
 
     public void init(){
 
@@ -34,7 +34,7 @@ public class NearbyViewModel extends ViewModel {
 
 
     }
-    public LiveData<AutocompletResult> getAutocompleteResult(String input, String location){
+    public LiveData<AutocompleteResult> getAutocompleteResult(String input, String location){
         nearbyRepository = NearbySearchServiceRepository.getInstance();
         autocompleteLiveData = nearbyRepository.getAutocompleteInputText(input, location );
         return autocompleteLiveData;

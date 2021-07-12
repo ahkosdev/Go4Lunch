@@ -2,9 +2,7 @@ package fr.kosdev.go4lunch.repositories;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.maps.GoogleMap;
-
-import fr.kosdev.go4lunch.model.autocomplete.AutocompletResult;
+import fr.kosdev.go4lunch.model.autocomplete.AutocompleteResult;
 import fr.kosdev.go4lunch.model.pojo.Example;
 import fr.kosdev.go4lunch.model.pojo_detail.ExampleDetail;
 import fr.kosdev.go4lunch.network.NearbySearchApiCall;
@@ -76,11 +74,11 @@ public class NearbySearchServiceRepository {
         return detail;
     }
 
-    public MutableLiveData<AutocompletResult> getAutocompleteInputText(String input, String location){
-        MutableLiveData<AutocompletResult> autocompleteData = new MutableLiveData<>();
-        nearbySearchApi.getRestaurantsWithAutocomplete(input, location).enqueue(new Callback<AutocompletResult>() {
+    public MutableLiveData<AutocompleteResult> getAutocompleteInputText(String input, String location){
+        MutableLiveData<AutocompleteResult> autocompleteData = new MutableLiveData<>();
+        nearbySearchApi.getRestaurantsWithAutocomplete(input, location).enqueue(new Callback<AutocompleteResult>() {
             @Override
-            public void onResponse(Call<AutocompletResult> call, Response<AutocompletResult> response) {
+            public void onResponse(Call<AutocompleteResult> call, Response<AutocompleteResult> response) {
                 if (response.isSuccessful()){
                     autocompleteData.setValue(response.body());
                 }
@@ -88,7 +86,7 @@ public class NearbySearchServiceRepository {
             }
 
             @Override
-            public void onFailure(Call<AutocompletResult> call, Throwable t) {
+            public void onFailure(Call<AutocompleteResult> call, Throwable t) {
                 autocompleteData.setValue(null);
 
             }
