@@ -1,6 +1,5 @@
 package fr.kosdev.go4lunch.model.pojo_detail;
 
-import android.location.Location;
 
 import com.google.geo.type.Viewport;
 import com.google.gson.annotations.Expose;

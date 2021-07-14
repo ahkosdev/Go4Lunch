@@ -48,6 +48,8 @@ import butterknife.ButterKnife;
 import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.controller.NearbyViewModel;
 import fr.kosdev.go4lunch.controller.activities.RestaurantDetailActivity;
+import fr.kosdev.go4lunch.controller.activities.RestaurantDetailViewModel;
+import fr.kosdev.go4lunch.model.autocomplete.Prediction;
 import fr.kosdev.go4lunch.model.pojo.Example;
 import fr.kosdev.go4lunch.model.pojo.Result;
 
@@ -60,6 +62,8 @@ public class MapFragment extends Fragment  {
     private FusedLocationProviderClient mLocationProviderClient;
     private SupportMapFragment mapFragment;
     private NearbyViewModel nearbyViewModel;
+    private List<Prediction> mPredictions;
+    private RestaurantDetailViewModel restaurantDetail;
 
 
 
@@ -202,7 +206,28 @@ public class MapFragment extends Fragment  {
 
     }
 
-    public void configureAutocomplete(){
+    public void configureAutocomplete(List<Prediction> mPredictions){
+        restaurantDetail.getDetailLiveData(mPredictions.get(0).getPlaceId()).observe(this, exampleDetail -> {
+            try {
+
+                mMap.clear();
+                Double lat = exampleDetail.getResult().getGeometry().getLocation().getLat();
+                Double lng = exampleDetail.getResult().getGeometry().getLocation().getLng();
+                String placeName = exampleDetail.getResult().getName();
+                String vicinity = exampleDetail.getResult().getVicinity();
+                MarkerOptions markerOptions = new MarkerOptions();
+                LatLng newLatLng = new LatLng(lat, lng);
+                markerOptions.position(newLatLng);
+                markerOptions.title(placeName + " : " + vicinity);
+                mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLatLng, 15));
+
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
 
     }
 

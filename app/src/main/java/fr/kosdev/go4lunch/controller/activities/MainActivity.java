@@ -26,9 +26,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.configureTwitterAuth();
         setContentView(R.layout.activity_main);
         this.startSigningActivity();
-        this.configureTwitterAuth();
+
     }
 
     @Override

@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelStore;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +34,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.kosdev.go4lunch.R;
@@ -43,6 +46,8 @@ import fr.kosdev.go4lunch.controller.fragments.MapFragment;
 import fr.kosdev.go4lunch.controller.fragments.SettingFragment;
 import fr.kosdev.go4lunch.controller.fragments.WorkmatesFragment;
 import fr.kosdev.go4lunch.model.Workmate;
+import fr.kosdev.go4lunch.model.autocomplete.Prediction;
+import fr.kosdev.go4lunch.notification.NotificationService;
 
 public class HomepageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -60,6 +65,8 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
     private static final int LOGOUT_EVENT = 2;
     private NearbyViewModel autocompleteView;
     MapFragment mapFragment;
+    Fragment selectedFragment;
+    NotificationService mNotificationService;
 
 
     @Override
@@ -82,13 +89,14 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         mBottomNavigationView.setOnNavigationItemSelectedListener(new OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment selectedFragment = null;
+                 selectedFragment = null;
 
                 switch (item.getItemId()){
 
                     case R.id.map_action:
                         selectedFragment = new MapFragment();
                         mToolbar.setTitle(R.string.map_toolbar_title);
+                        mapFragment = (MapFragment) selectedFragment;
                         break;
 
                     case R.id.listView_action:
@@ -271,9 +279,18 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
 
     private void callAutocomplete(String input){
         autocompleteView.getAutocompleteResult(input,"46.6743,4.3634").observe(this, autocompleteResult -> {
-            autocompleteResult.getPredictions();
+             List<Prediction> autoResult = autocompleteResult.getPredictions();
+             mapFragment = (MapFragment) selectedFragment;
+             mapFragment.configureAutocomplete(autoResult);
         });
     }
+
+    //private void notificationSetting(){
+        //Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
+        //intent.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
+        //intent.putExtra(Settings.EXTRA_CHANNEL_ID, myNotificationChannel.getId());
+       // startActivity(intent);
+   // }
 
 
 }
