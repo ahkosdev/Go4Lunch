@@ -4,38 +4,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.DownloadManager;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.firebase.ui.firestore.ObservableSnapshotArray;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.api.WorkmateHelper;
-import fr.kosdev.go4lunch.controller.fragments.WorkmatesFragment;
 import fr.kosdev.go4lunch.model.Workmate;
-import fr.kosdev.go4lunch.model.pojo_detail.ExampleDetail;
-import fr.kosdev.go4lunch.model.pojo_detail.Result;
+import fr.kosdev.go4lunch.model.pojo_detail.Results;
 
 import static com.google.firebase.auth.FirebaseAuth.getInstance;
 
@@ -57,7 +46,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     RecyclerView restaurantDetailRcv;
 
     private RestaurantDetailsAdapter restaurantAdapter;
-    private Result result;
+    private Results mResults;
     private RestaurantDetailViewModel restaurantViewModel;
     private String phoneNumber;
     private String restaurantUrl;
@@ -111,9 +100,9 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             if (intent.hasExtra("KEY_DETAIL")){
                String placeId = intent.getStringExtra("KEY_DETAIL");
                    restaurantViewModel.getDetailLiveData(placeId).observe(this, exampleDetail -> {
-                       restaurantName.setText(exampleDetail.getResult().getName());
-                       restaurantVicinity.setText(exampleDetail.getResult().getVicinity());
-                       String photoReference = exampleDetail.getResult().getPhotos().get(0).getPhotoReference();
+                       restaurantName.setText(exampleDetail.getResults().getName());
+                       restaurantVicinity.setText(exampleDetail.getResults().getVicinity());
+                       String photoReference = exampleDetail.getResults().getPhotos().get(0).getPhotoReference();
                        if (photoReference != null)
                        Glide.with(restaurantImage.getContext())
                                .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=600&photoreference="+ photoReference +"&key=AIzaSyBk1fsJRc21Wlt0usxn_UtjPhY2waPqiRE")
@@ -121,7 +110,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                        callButton.setOnClickListener(new View.OnClickListener() {
                            @Override
                            public void onClick(View v) {
-                               phoneNumber = exampleDetail.getResult().getFormattedPhoneNumber();
+                               phoneNumber = exampleDetail.getResults().getFormattedPhoneNumber();
                                Intent callIntent = new Intent(Intent.ACTION_DIAL);
                                callIntent.setData(Uri.parse("tel:" + phoneNumber));
                                if (callIntent.resolveActivity(getPackageManager()) != null){
@@ -133,7 +122,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                        webImage.setOnClickListener(new View.OnClickListener() {
                            @Override
                            public void onClick(View v) {
-                               restaurantUrl = exampleDetail.getResult().getWebsite();
+                               restaurantUrl = exampleDetail.getResults().getWebsite();
                                Uri webPage = Uri.parse(restaurantUrl);
                                Intent webIntent = new Intent(Intent.ACTION_VIEW, webPage);
                                if (webIntent.resolveActivity(getPackageManager()) != null){
@@ -146,8 +135,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                            @Override
                            public void onClick(View v) {
                                currentWorkmate = FirebaseAuth.getInstance().getCurrentUser();
-                               String restaurantName = exampleDetail.getResult().getName();
-                               String restaurantAddress = exampleDetail.getResult().getVicinity();
+                               String restaurantName = exampleDetail.getResults().getName();
+                               String restaurantAddress = exampleDetail.getResults().getVicinity();
                                WorkmateHelper.updatePlaceId(placeId,currentWorkmate.getUid());
                                WorkmateHelper.updateRestaurantName(restaurantName,currentWorkmate.getUid());
                                WorkmateHelper.updateRestaurantAddress(restaurantAddress,currentWorkmate.getUid());
@@ -167,9 +156,9 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             if (intent.hasExtra("CURRENT_KEY")){
                 String placeId = intent.getStringExtra("CURRENT_KEY");
                 restaurantViewModel.getDetailLiveData(placeId).observe(this, exampleDetail -> {
-                    restaurantName.setText(exampleDetail.getResult().getName());
-                    restaurantVicinity.setText(exampleDetail.getResult().getVicinity());
-                    String photoReference = exampleDetail.getResult().getPhotos().get(0).getPhotoReference();
+                    restaurantName.setText(exampleDetail.getResults().getName());
+                    restaurantVicinity.setText(exampleDetail.getResults().getVicinity());
+                    String photoReference = exampleDetail.getResults().getPhotos().get(0).getPhotoReference();
                     if (photoReference != null)
                         Glide.with(restaurantImage.getContext())
                                 .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=600&photoreference="+ photoReference +"&key=AIzaSyBk1fsJRc21Wlt0usxn_UtjPhY2waPqiRE")
@@ -177,7 +166,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     callButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            phoneNumber = exampleDetail.getResult().getFormattedPhoneNumber();
+                            phoneNumber = exampleDetail.getResults().getFormattedPhoneNumber();
                             Intent callIntent = new Intent(Intent.ACTION_DIAL);
                             callIntent.setData(Uri.parse("tel:" + phoneNumber));
                             if (callIntent.resolveActivity(getPackageManager()) != null){
@@ -188,7 +177,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     webImage.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            restaurantUrl = exampleDetail.getResult().getWebsite();
+                            restaurantUrl = exampleDetail.getResults().getWebsite();
                             Uri webPage = Uri.parse(restaurantUrl);
                             Intent webIntent = new Intent(Intent.ACTION_VIEW, webPage);
                             if (webIntent.resolveActivity(getPackageManager()) != null){

@@ -13,7 +13,7 @@ public class ExampleDetail {
     private List<Object> htmlAttributions = null;
     @SerializedName("result")
     @Expose
-    private Result result;
+    private Results mResults;
     @SerializedName("status")
     @Expose
     private String status;
@@ -26,12 +26,12 @@ public class ExampleDetail {
         this.htmlAttributions = htmlAttributions;
     }
 
-    public Result getResult() {
-        return result;
+    public Results getResults() {
+        return mResults;
     }
 
-    public void setResult(Result result) {
-        this.result = result;
+    public void setResults(Results results) {
+        this.mResults = results;
     }
 
     public String getStatus() {

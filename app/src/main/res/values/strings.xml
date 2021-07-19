@@ -37,6 +37,8 @@
     <string name="info_no_username_found">No username</string>
     <string name="info_no_email_found">No email address</string>
 
+    <string name="setting_notification" translatable="false"> notification setting </string>
+
 
 
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>

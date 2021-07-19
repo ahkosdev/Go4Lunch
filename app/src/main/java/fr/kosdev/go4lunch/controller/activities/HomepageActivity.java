@@ -64,8 +64,8 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
     private static final int SETTING_FRAGMENT = 1;
     private static final int LOGOUT_EVENT = 2;
     private NearbyViewModel autocompleteView;
-    MapFragment mapFragment;
-    Fragment selectedFragment;
+    private MapFragment mapFragment;
+    private Fragment selectedFragment;
     NotificationService mNotificationService;
 
 
@@ -79,7 +79,8 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
         this.configureNavigationView();
         this.configureDrawerLayout();
         this.updateProfileUI();
-        getSupportFragmentManager().beginTransaction().add(R.id.homepage_frame_layout, new MapFragment()).commit();
+        selectedFragment = new MapFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.homepage_frame_layout,selectedFragment).commit();
         autocompleteView = new ViewModelProvider(this).get(NearbyViewModel.class);
 
     }
@@ -96,7 +97,6 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                     case R.id.map_action:
                         selectedFragment = new MapFragment();
                         mToolbar.setTitle(R.string.map_toolbar_title);
-                        mapFragment = (MapFragment) selectedFragment;
                         break;
 
                     case R.id.listView_action:
@@ -280,17 +280,20 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
     private void callAutocomplete(String input){
         autocompleteView.getAutocompleteResult(input,"46.6743,4.3634").observe(this, autocompleteResult -> {
              List<Prediction> autoResult = autocompleteResult.getPredictions();
-             mapFragment = (MapFragment) selectedFragment;
-             mapFragment.configureAutocomplete(autoResult);
+             if (selectedFragment instanceof MapFragment){
+                 mapFragment = (MapFragment) selectedFragment;
+                 mapFragment.configureAutocomplete(autoResult);
+             }else if (selectedFragment instanceof ListViewFragment){
+                 ListViewFragment listViewFragment = (ListViewFragment) selectedFragment;
+                 listViewFragment.updateWithPredictions(autoResult);
+
+             }
+
+
         });
     }
 
-    //private void notificationSetting(){
-        //Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
-        //intent.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
-        //intent.putExtra(Settings.EXTRA_CHANNEL_ID, myNotificationChannel.getId());
-       // startActivity(intent);
-   // }
+
 
 
 }

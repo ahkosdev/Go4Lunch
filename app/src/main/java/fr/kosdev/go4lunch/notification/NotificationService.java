@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.os.Build;
 
@@ -34,9 +35,14 @@ public class NotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        if (remoteMessage.getNotification() != null){
-            RemoteMessage.Notification notification = remoteMessage.getNotification();
-            sendVisualNotification(notification);
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("_", MODE_PRIVATE);
+        //Boolean defaultValue = true;
+        Boolean enableNotification = sharedPref.getBoolean(getString(R.string.setting_notification), false);
+        if (enableNotification == true) {
+            if (remoteMessage.getNotification() != null) {
+                RemoteMessage.Notification notification = remoteMessage.getNotification();
+                sendVisualNotification(notification);
+            }
         }
     }
 

@@ -6,25 +6,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -32,7 +22,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -41,17 +30,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.List;
-import java.util.zip.Inflater;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.controller.NearbyViewModel;
 import fr.kosdev.go4lunch.controller.activities.RestaurantDetailActivity;
-import fr.kosdev.go4lunch.controller.activities.RestaurantDetailViewModel;
 import fr.kosdev.go4lunch.model.autocomplete.Prediction;
-import fr.kosdev.go4lunch.model.pojo.Example;
-import fr.kosdev.go4lunch.model.pojo.Result;
 
 
 public class MapFragment extends Fragment  {
@@ -63,7 +47,6 @@ public class MapFragment extends Fragment  {
     private SupportMapFragment mapFragment;
     private NearbyViewModel nearbyViewModel;
     private List<Prediction> mPredictions;
-    private RestaurantDetailViewModel restaurantDetail;
 
 
 
@@ -92,8 +75,6 @@ public class MapFragment extends Fragment  {
         }
 
         this.configureViewModel();
-
-
         return view;
 
     }
@@ -206,30 +187,31 @@ public class MapFragment extends Fragment  {
 
     }
 
-    public void configureAutocomplete(List<Prediction> mPredictions){
-        restaurantDetail.getDetailLiveData(mPredictions.get(0).getPlaceId()).observe(this, exampleDetail -> {
-            try {
+    public void configureAutocomplete(List<Prediction> mPredictions) {
+        mMap.clear();
+        for (int i = 0; i < mPredictions.size(); i++) {
+            nearbyViewModel.getDetailLiveData(mPredictions.get(i).getPlaceId()).observe(this, exampleDetail -> {
+                try {
 
-                mMap.clear();
-                Double lat = exampleDetail.getResult().getGeometry().getLocation().getLat();
-                Double lng = exampleDetail.getResult().getGeometry().getLocation().getLng();
-                String placeName = exampleDetail.getResult().getName();
-                String vicinity = exampleDetail.getResult().getVicinity();
-                MarkerOptions markerOptions = new MarkerOptions();
-                LatLng newLatLng = new LatLng(lat, lng);
-                markerOptions.position(newLatLng);
-                markerOptions.title(placeName + " : " + vicinity);
-                mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLatLng, 15));
 
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
+                    Double lat = exampleDetail.getResults().getGeometry().getLocation().getLat();
+                    Double lng = exampleDetail.getResults().getGeometry().getLocation().getLng();
+                    String placeName = exampleDetail.getResults().getName();
+                    String vicinity = exampleDetail.getResults().getVicinity();
+                    MarkerOptions newMarkerOptions = new MarkerOptions();
+                    LatLng autocompleteLatLng = new LatLng(lat, lng);
+                    newMarkerOptions.position(autocompleteLatLng);
+                    newMarkerOptions.title(placeName + " : " + vicinity);
+                   mMap.addMarker(newMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
-        });
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            });
+
+        }
     }
-
 
 }

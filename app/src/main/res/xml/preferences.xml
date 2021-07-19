@@ -7,12 +7,6 @@
         app:icon="@drawable/ic_baseline_notifications_24"
         android:title="Notifications">
 
-        <SeekBarPreference
-            app:key="notification_volume"
-            app:title="Volume"
-            app:showSeekBarValue="true"
-            app:defaultValue="50"
-            />
         <SwitchPreferenceCompat
             app:key="notification"
             app:title="Disable Notification"

@@ -1,4 +1,4 @@
-package fr.kosdev.go4lunch.controller.fragments;
+package fr.kosdev.go4lunch.controller.activities;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -11,19 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import fr.kosdev.go4lunch.R;
-import fr.kosdev.go4lunch.controller.activities.ListViewViewHolder;
-import fr.kosdev.go4lunch.controller.activities.RestaurantDetailActivity;
-import fr.kosdev.go4lunch.model.pojo.Result;
 import fr.kosdev.go4lunch.model.pojo_detail.Results;
 
-public class ListViewAdapter extends RecyclerView.Adapter<ListViewViewHolder> {
+public class AutoCompleteListAdapter extends RecyclerView.Adapter<ListViewViewHolder> {
 
-
-    private List<Result> mResults;
+    private List<Results> mDetailResult;
     private String placeId;
 
-    public ListViewAdapter( List<Result> results) {
-        this.mResults = results;
+    public AutoCompleteListAdapter(List<Results> detailResult) {
+        this.mDetailResult = detailResult;
     }
 
     @NonNull
@@ -36,11 +32,11 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ListViewViewHolder holder, int position) {
 
-        holder.updateRestaurantList(mResults.get(position));
+        holder.updateListWithDetailResult(mDetailResult.get(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                placeId = mResults.get(position).getPlaceId();
+                placeId = mDetailResult.get(position).getPlaceId();
                 Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
                 intent.putExtra("KEY_DETAIL",  placeId );
                 v.getContext().startActivity(intent);
@@ -51,6 +47,6 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mResults.size();
+        return 0;
     }
 }

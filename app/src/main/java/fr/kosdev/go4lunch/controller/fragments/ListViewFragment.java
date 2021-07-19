@@ -13,13 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -35,10 +33,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.controller.ListViewViewModel;
+import fr.kosdev.go4lunch.controller.activities.AutoCompleteListAdapter;
 import fr.kosdev.go4lunch.model.Restaurant;
-import fr.kosdev.go4lunch.model.pojo.Example;
-import fr.kosdev.go4lunch.model.pojo.Photo;
+import fr.kosdev.go4lunch.model.autocomplete.Prediction;
 import fr.kosdev.go4lunch.model.pojo.Result;
+import fr.kosdev.go4lunch.model.pojo_detail.Results;
 
 public class ListViewFragment extends Fragment {
 
@@ -53,6 +52,8 @@ public class ListViewFragment extends Fragment {
     List<Restaurant> restaurants;
     List<Result> results;
     ListViewAdapter listAdapter;
+    AutoCompleteListAdapter autoCompleteListAdapter;
+    List<Results> mDetailResults;
 
 
     @Nullable
@@ -136,5 +137,32 @@ public class ListViewFragment extends Fragment {
         listAdapter = new ListViewAdapter(results);
         listViewRecyclerView.setAdapter(listAdapter);
         listViewRecyclerView.setHasFixedSize(true);
+    }
+
+    public void updateWithPredictions(List<Prediction> predictions){
+        mDetailResults = new ArrayList<>();
+        autoCompleteListAdapter = new AutoCompleteListAdapter(mDetailResults);
+        listViewRecyclerView.setAdapter(autoCompleteListAdapter);
+
+        for (int i = 0; i < predictions.size(); i++) {
+            listViewModel.getDetailLiveData(predictions.get(i).getPlaceId()).observe(this, exampleDetail -> {
+                try {
+
+                    //mDetailResults.clear();
+                    mDetailResults.add(exampleDetail.getResults());
+                    autoCompleteListAdapter.notifyDataSetChanged();
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            });
+
+        }
+
+
+
     }
 }
