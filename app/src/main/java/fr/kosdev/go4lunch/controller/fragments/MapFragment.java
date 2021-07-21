@@ -139,7 +139,7 @@ public class MapFragment extends Fragment implements LocationListener {
                                                 @Override
                                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                                     for (int j = 0; j < queryDocumentSnapshots.getDocuments().size(); j++) {
-                                                        String workmatePlaceId = queryDocumentSnapshots.getDocuments().get(j).get("placeId").toString();
+                                                        String workmatePlaceId = String.valueOf(queryDocumentSnapshots.getDocuments().get(j).get("placeId"));
                                                         if (workmatePlaceId.equals(placeId)){
                                                             mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
 
