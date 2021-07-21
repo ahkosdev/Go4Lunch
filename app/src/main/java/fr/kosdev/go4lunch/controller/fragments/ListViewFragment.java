@@ -145,20 +145,21 @@ public class ListViewFragment extends Fragment {
         listViewRecyclerView.setAdapter(autoCompleteListAdapter);
 
         for (int i = 0; i < predictions.size(); i++) {
-            listViewModel.getDetailLiveData(predictions.get(i).getPlaceId()).observe(this, exampleDetail -> {
-                try {
+            if (predictions.get(i).getTypes().contains("restaurant")) {
+                listViewModel.getDetailLiveData(predictions.get(i).getPlaceId()).observe(this, exampleDetail -> {
+                    try {
 
-                    //mDetailResults.clear();
-                    mDetailResults.add(exampleDetail.getResults());
-                    autoCompleteListAdapter.notifyDataSetChanged();
+                        //mDetailResults.clear();
+                        mDetailResults.add(exampleDetail.getResults());
+                        autoCompleteListAdapter.notifyDataSetChanged();
 
 
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            });
+                });
+            }
 
         }
 

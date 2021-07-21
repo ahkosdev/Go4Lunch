@@ -8,7 +8,7 @@
         android:title="Notifications">
 
         <SwitchPreferenceCompat
-            app:key="notification"
+            app:key="@string/disable_key"
             app:title="Disable Notification"
             android:summaryOff="You will no longer receive notifications"
             android:summaryOn="You will receive all notifications"

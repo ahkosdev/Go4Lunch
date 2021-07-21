@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,17 +29,20 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import fr.kosdev.go4lunch.R;
+import fr.kosdev.go4lunch.api.WorkmateHelper;
 import fr.kosdev.go4lunch.controller.NearbyViewModel;
 import fr.kosdev.go4lunch.controller.activities.RestaurantDetailActivity;
+import fr.kosdev.go4lunch.model.Workmate;
 import fr.kosdev.go4lunch.model.autocomplete.Prediction;
 
 
-public class MapFragment extends Fragment  {
+public class MapFragment extends Fragment implements LocationListener {
 
 
 
@@ -47,6 +51,8 @@ public class MapFragment extends Fragment  {
     private SupportMapFragment mapFragment;
     private NearbyViewModel nearbyViewModel;
     private List<Prediction> mPredictions;
+    private Workmate mWorkmate;
+    private List<Workmate> mWorkmateList;
 
 
 
@@ -91,10 +97,12 @@ public class MapFragment extends Fragment  {
                         @Override
                         public void onMapReady(@NonNull GoogleMap googleMap) {
                             mMap = googleMap;
-                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker in Sydney"));
+                            //LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            LatLng latLng = new LatLng(46.6743,4.3634);
+                            mMap.addMarker(new MarkerOptions().position(latLng).title("My house"));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                            mMap.setMyLocationEnabled(true);
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
 
@@ -110,6 +118,7 @@ public class MapFragment extends Fragment  {
                                             Double lng = example.getResults().get(i).getGeometry().getLocation().getLng();
                                             String placeName = example.getResults().get(i).getName();
                                             String vicinity = example.getResults().get(i).getVicinity();
+                                            String placeId = example.getResults().get(i).getPlaceId();
                                             MarkerOptions markerOptions = new MarkerOptions();
                                             LatLng newLatLng = new LatLng(lat, lng);
                                             markerOptions.position(newLatLng);
@@ -118,7 +127,29 @@ public class MapFragment extends Fragment  {
                                                     .setTag(example.getResults().get(i).getPlaceId());
                                             //markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                                             mMap.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
+                                            mMap.setMyLocationEnabled(true);
                                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLatLng, 15));
+                                            //if (WorkmateHelper.getWorkmatesWithPlaceId(placeId) == null){
+                                                //mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                                            //}else {
+                                                //mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+
+                                            //}
+                                            WorkmateHelper.getWorkmates().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                    for (int j = 0; j < queryDocumentSnapshots.getDocuments().size(); j++) {
+                                                        String workmatePlaceId = queryDocumentSnapshots.getDocuments().get(j).get("placeId").toString();
+                                                        if (workmatePlaceId.equals(placeId)){
+                                                            mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+
+                                                        }else {
+                                                            mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                                                        }
+                                                    }
+
+                                                }
+                                            });
                                             mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                                                 @Override
                                                 public void onInfoWindowClick(@NonNull Marker marker) {
@@ -173,6 +204,8 @@ public class MapFragment extends Fragment  {
     }
 
 
+
+
     private void configureViewModel(){
 
         nearbyViewModel = new ViewModelProvider(this).get(NearbyViewModel.class);
@@ -190,6 +223,7 @@ public class MapFragment extends Fragment  {
     public void configureAutocomplete(List<Prediction> mPredictions) {
         mMap.clear();
         for (int i = 0; i < mPredictions.size(); i++) {
+            if (mPredictions.get(i).getTypes().contains("restaurant"))
             nearbyViewModel.getDetailLiveData(mPredictions.get(i).getPlaceId()).observe(this, exampleDetail -> {
                 try {
 
@@ -202,7 +236,8 @@ public class MapFragment extends Fragment  {
                     LatLng autocompleteLatLng = new LatLng(lat, lng);
                     newMarkerOptions.position(autocompleteLatLng);
                     newMarkerOptions.title(placeName + " : " + vicinity);
-                   mMap.addMarker(newMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                   mMap.addMarker(newMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
+                           .setTag(exampleDetail.getResults().getPlaceId());
 
 
                 } catch (Exception e) {
@@ -214,4 +249,16 @@ public class MapFragment extends Fragment  {
         }
     }
 
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+
+        if (mMap != null){
+            LatLng locationChangedLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(locationChangedLatLng).title("My position"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(locationChangedLatLng));
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(locationChangedLatLng, 15));
+
+        }
+    }
 }

@@ -11,6 +11,7 @@ import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,13 +36,14 @@ public class NotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("_", MODE_PRIVATE);
+        //SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("disable", MODE_PRIVATE);
         //Boolean defaultValue = true;
-        Boolean enableNotification = sharedPref.getBoolean(getString(R.string.setting_notification), false);
-        if (enableNotification == true) {
+        boolean enableNotification = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("notification", false);
+        if (enableNotification) {
             if (remoteMessage.getNotification() != null) {
                 RemoteMessage.Notification notification = remoteMessage.getNotification();
                 sendVisualNotification(notification);
+
             }
         }
     }

@@ -47,6 +47,6 @@ public class AutoCompleteListAdapter extends RecyclerView.Adapter<ListViewViewHo
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mDetailResult.size();
     }
 }

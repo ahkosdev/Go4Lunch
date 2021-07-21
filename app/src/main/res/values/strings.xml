@@ -38,6 +38,7 @@
     <string name="info_no_email_found">No email address</string>
 
     <string name="setting_notification" translatable="false"> notification setting </string>
+    <string name="disable_key" translatable="false"> disable key </string>
 
 
 

@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreferenceCompat;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,10 +27,28 @@ public class SettingFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences,rootKey);
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("_", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean(getString(R.string.setting_notification), true);
-        editor.apply();
+        //final SharedPreferences sharedPref = getActivity().getSharedPreferences("disable", MODE_PRIVATE);
+        //final SwitchPreferenceCompat preferenceCompat = (SwitchPreferenceCompat) findPreference(this.getResources().getString(R.string.disable_key));
+        //preferenceCompat.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            //@Override
+            //public boolean onPreferenceChange(Preference preference, Object newValue) {
+                //Boolean disable = (Boolean) newValue;
+                //if (disable){
+
+                    //preferenceCompat.setChecked(false);
+
+                //}else {
+
+                    //preferenceCompat.setChecked(true);
+
+                //}
+               //SharedPreferences.Editor editor = sharedPref.edit();
+                //editor.putBoolean(getString(R.string.disable_key), disable);
+                //editor.apply();
+                //return true;
+            //}
+        //});
+
 
     }
 
