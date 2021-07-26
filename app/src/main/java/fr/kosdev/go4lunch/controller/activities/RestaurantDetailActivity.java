@@ -19,6 +19,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.Query;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.kosdev.go4lunch.R;
@@ -40,6 +43,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     ImageButton callButton;
     @BindView(R.id.website_button)
     ImageButton webImage;
+    @BindView(R.id.like_button)
+    ImageButton likeButton;
     @BindView(R.id.restaurant_detail_fab)
     FloatingActionButton restaurantFab;
     @BindView(R.id.restaurant_detail_rcv)
@@ -143,6 +148,17 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
                            }
                        });
+                       likeButton.setOnClickListener(new View.OnClickListener() {
+                           @Override
+                           public void onClick(View v) {
+                               currentWorkmate = FirebaseAuth.getInstance().getCurrentUser();
+                               String restaurantName = exampleDetail.getResults().getName();
+                               List<String> ratings = new ArrayList<>();
+                               ratings.add(restaurantName);
+                               WorkmateHelper.updateRatingsList(ratings, currentWorkmate.getUid());
+                           }
+                       });
+
 
                    });
 

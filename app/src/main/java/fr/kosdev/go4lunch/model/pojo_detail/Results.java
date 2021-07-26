@@ -35,6 +35,9 @@ public class Results {
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("opening_hours")
+    @Expose
+    private DetailOpeningHours mDetailOpeningHours;
     @SerializedName("photos")
     @Expose
     private List<Photo> photos = null;
@@ -142,6 +145,14 @@ public class Results {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public DetailOpeningHours getDetailOpeningHours() {
+        return mDetailOpeningHours;
+    }
+
+    public void setDetailOpeningHours(DetailOpeningHours detailOpeningHours) {
+        this.mDetailOpeningHours = detailOpeningHours;
     }
 
     public List<Photo> getPhotos() {

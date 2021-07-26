@@ -1,5 +1,9 @@
 package fr.kosdev.go4lunch.network;
 
+import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import fr.kosdev.go4lunch.model.autocomplete.AutocompleteResult;
 import fr.kosdev.go4lunch.model.pojo.Example;
 import fr.kosdev.go4lunch.model.pojo_detail.ExampleDetail;

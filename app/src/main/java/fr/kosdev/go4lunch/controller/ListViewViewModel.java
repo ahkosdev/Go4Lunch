@@ -1,8 +1,12 @@
 package fr.kosdev.go4lunch.controller;
 
+import android.location.Location;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import fr.kosdev.go4lunch.model.pojo.Example;
 import fr.kosdev.go4lunch.model.pojo_detail.ExampleDetail;
@@ -15,6 +19,8 @@ public class ListViewViewModel extends ViewModel {
     private MutableLiveData<ExampleDetail> detailLiveData;
     private NearbySearchServiceRepository detailRepository;
 
+
+
     public void init(){
 
         if (mLiveData != null){
@@ -22,9 +28,10 @@ public class ListViewViewModel extends ViewModel {
         }
 
         nearbyRepository = NearbySearchServiceRepository.getInstance();
-        mLiveData = nearbyRepository.getData("restaurant", "46.6743,4.3634", 1500);
+
     }
-    public LiveData<Example> getNearbyRepository(){
+    public LiveData<Example> getNearbyRepository(String myLocation){
+        mLiveData = nearbyRepository.getData("restaurant", myLocation, 1500);
 
         return mLiveData;
     }

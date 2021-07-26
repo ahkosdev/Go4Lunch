@@ -88,8 +88,8 @@ public class ListViewFragment extends Fragment {
             public void onSuccess(Location location) {
 
                 if (location != null){
-
-                    listViewModel.getNearbyRepository().observe(getViewLifecycleOwner(),example -> {
+                    String myLocation = location.getLatitude() + "," + location.getLongitude();
+                    listViewModel.getNearbyRepository( myLocation).observe(getViewLifecycleOwner(),example -> {
 
                         try {
 

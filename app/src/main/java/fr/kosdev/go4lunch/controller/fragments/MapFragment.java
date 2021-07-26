@@ -27,8 +27,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
@@ -98,15 +100,17 @@ public class MapFragment extends Fragment implements LocationListener {
                         public void onMapReady(@NonNull GoogleMap googleMap) {
                             mMap = googleMap;
                             //LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            LatLng latLng = new LatLng(46.6743,4.3634);
+                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                             mMap.addMarker(new MarkerOptions().position(latLng).title("My house"));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                             mMap.setMyLocationEnabled(true);
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
+                            String myLocation = location.getLatitude() + "," + location.getLongitude();
 
-                                nearbyViewModel.getNearbyRepository().observe(getViewLifecycleOwner(), example -> {
+
+                                nearbyViewModel.getNearbyRepository(myLocation).observe(getViewLifecycleOwner(), example -> {
 
                                     try {
 
@@ -129,27 +133,18 @@ public class MapFragment extends Fragment implements LocationListener {
                                             mMap.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
                                             mMap.setMyLocationEnabled(true);
                                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLatLng, 15));
-                                            //if (WorkmateHelper.getWorkmatesWithPlaceId(placeId) == null){
-                                                //mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-                                            //}else {
-                                                //mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-
-                                            //}
-                                            WorkmateHelper.getWorkmates().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            WorkmateHelper.getWorkmatesWithPlaceId(placeId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                                 @Override
                                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                    for (int j = 0; j < queryDocumentSnapshots.getDocuments().size(); j++) {
-                                                        String workmatePlaceId = String.valueOf(queryDocumentSnapshots.getDocuments().get(j).get("placeId"));
-                                                        if (workmatePlaceId.equals(placeId)){
-                                                            mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-
-                                                        }else {
-                                                            mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-                                                        }
+                                                    if (queryDocumentSnapshots.size() > 0){
+                                                        mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))).setTag(placeId);
+                                                    }else {
+                                                        mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))).setTag(placeId);
                                                     }
 
                                                 }
                                             });
+
                                             mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                                                 @Override
                                                 public void onInfoWindowClick(@NonNull Marker marker) {

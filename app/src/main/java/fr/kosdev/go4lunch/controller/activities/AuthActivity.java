@@ -14,12 +14,14 @@ import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterConfig;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.api.WorkmateHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class AuthActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 125;
 
@@ -38,11 +40,6 @@ public class MainActivity extends AppCompatActivity {
         this.handleResponseAfterSignIn(requestCode, resultCode, data);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        this.startSigningActivity();
-    }
 
     private void startSigningActivity(){
 
@@ -61,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private void startHomepageActivity(){
         Intent intent = new Intent(this, HomepageActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void handleResponseAfterSignIn(int requestCode, int resultCode, Intent data){
@@ -87,8 +85,9 @@ public class MainActivity extends AppCompatActivity {
             String placeId = "";
             String restaurantName = "";
             String restaurantAddress = "";
+            List<String> ratings = new ArrayList<>();
 
-            WorkmateHelper.createWorkmate(uid,firstname,urlPicture,placeId,restaurantName,restaurantAddress);
+            WorkmateHelper.createWorkmate(uid,firstname,urlPicture,placeId,restaurantName,restaurantAddress,ratings);
         }
     }
 

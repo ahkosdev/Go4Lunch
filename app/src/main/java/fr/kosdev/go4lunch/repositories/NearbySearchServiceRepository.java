@@ -1,6 +1,10 @@
 package fr.kosdev.go4lunch.repositories;
 
+import android.location.Location;
+
 import androidx.lifecycle.MutableLiveData;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import fr.kosdev.go4lunch.model.autocomplete.AutocompleteResult;
 import fr.kosdev.go4lunch.model.pojo.Example;

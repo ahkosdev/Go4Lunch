@@ -1,5 +1,8 @@
 package fr.kosdev.go4lunch.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Workmate {
     private String uid;
     private String firstname;
@@ -7,16 +10,18 @@ public class Workmate {
     private String urlPicture;
     private String restaurantName;
     private String restaurantAddress;
+    private List<String> ratings = new ArrayList<>();
 
     public Workmate(){}
 
-    public Workmate(String uid, String firstname, String urlPicture, String placeId, String restaurantName, String restaurantAddress) {
+    public Workmate(String uid, String firstname, String urlPicture, String placeId, String restaurantName, String restaurantAddress, List<String> ratings) {
         this.uid = uid;
         this.firstname = firstname;
         this.urlPicture = urlPicture;
         this.placeId = placeId;
         this.restaurantName = restaurantName;
         this.restaurantAddress = restaurantAddress;
+        this.ratings = ratings;
     }
 
     public String getUid() {
@@ -65,6 +70,14 @@ public class Workmate {
 
     public void setRestaurantAddress(String restaurantAddress) {
         this.restaurantAddress = restaurantAddress;
+    }
+
+    public List<String> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<String> ratings) {
+        this.ratings = ratings;
     }
 }
 

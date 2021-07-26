@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.os.Build;
 
@@ -25,7 +24,7 @@ import java.util.List;
 
 import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.api.WorkmateHelper;
-import fr.kosdev.go4lunch.controller.activities.MainActivity;
+import fr.kosdev.go4lunch.controller.activities.AuthActivity;
 import fr.kosdev.go4lunch.model.Workmate;
 
 public class NotificationService extends FirebaseMessagingService {
@@ -36,9 +35,7 @@ public class NotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        //SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("disable", MODE_PRIVATE);
-        //Boolean defaultValue = true;
-        boolean enableNotification = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("notification", false);
+        boolean enableNotification = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(getString(R.string.disable_key), false);
         if (enableNotification) {
             if (remoteMessage.getNotification() != null) {
                 RemoteMessage.Notification notification = remoteMessage.getNotification();
@@ -51,7 +48,7 @@ public class NotificationService extends FirebaseMessagingService {
     private void sendVisualNotification(RemoteMessage.Notification notification){
 
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, AuthActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
         WorkmateHelper.getWorkmate(this.getCurrentWorkmate().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

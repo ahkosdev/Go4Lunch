@@ -1,48 +1,30 @@
 package fr.kosdev.go4lunch.controller.activities;
 
 import android.annotation.SuppressLint;
-import android.app.DownloadManager;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.api.WorkmateHelper;
-import fr.kosdev.go4lunch.controller.NearbyViewModel;
-import fr.kosdev.go4lunch.model.Restaurant;
-import fr.kosdev.go4lunch.model.Workmate;
 import fr.kosdev.go4lunch.model.pojo.OpeningHours;
 import fr.kosdev.go4lunch.model.pojo.Result;
+import fr.kosdev.go4lunch.model.pojo_detail.DetailOpeningHours;
 import fr.kosdev.go4lunch.model.pojo_detail.Results;
-
-import static com.google.api.AnnotationsProto.http;
 
 public class ListViewViewHolder extends ViewHolder {
 
@@ -88,9 +70,8 @@ public class ListViewViewHolder extends ViewHolder {
             }
         }
 
-
+        if (result.getPhotos().size() > 0){
             String restaurantPhoto = result.getPhotos().get(0).getPhotoReference();
-
             if (restaurantPhoto != null){
 
                 Glide.with(restaurantImage.getContext())
@@ -98,6 +79,8 @@ public class ListViewViewHolder extends ViewHolder {
                         .into(restaurantImage);
 
             }
+        }
+
 
             double rating = result.getRating();
 
@@ -150,14 +133,14 @@ public class ListViewViewHolder extends ViewHolder {
 
         restaurantName.setText(results.getName());
         restaurantVicinity.setText(results.getVicinity());
-        //OpeningHours openingHours = results.getOpeningHours();
-        //if (openingHours != null){
-           // if (results.getOpeningHours().getOpenNow()== true){
-               // restaurantOpenHours.setText(R.string.open_text);
-           // }else {
-                //restaurantOpenHours.setText(R.string.close_text);
-            //}
-        //}
+        DetailOpeningHours openingHours = results.getDetailOpeningHours();
+        if (openingHours != null){
+            if (results.getDetailOpeningHours().getOpenNow()== true){
+                restaurantOpenHours.setText(R.string.open_text);
+            }else {
+                restaurantOpenHours.setText(R.string.close_text);
+            }
+        }
 
 
         String restaurantPhoto = results.getPhotos().get(0).getPhotoReference();

@@ -78,6 +78,7 @@
             style="@style/MyRatingBar"
             android:stepSize="0.1"
             android:theme="@style/MyRatingBar"
+
             />
 
     </LinearLayout>
