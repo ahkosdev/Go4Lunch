@@ -14,9 +14,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
@@ -49,6 +51,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     FloatingActionButton restaurantFab;
     @BindView(R.id.restaurant_detail_rcv)
     RecyclerView restaurantDetailRcv;
+    @BindView(R.id.like_img)
+    ImageView likeImage;
 
     private RestaurantDetailsAdapter restaurantAdapter;
     private Results mResults;
@@ -153,9 +157,21 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                            public void onClick(View v) {
                                currentWorkmate = FirebaseAuth.getInstance().getCurrentUser();
                                String restaurantName = exampleDetail.getResults().getName();
-                               List<String> ratings = new ArrayList<>();
-                               ratings.add(restaurantName);
-                               WorkmateHelper.updateRatingsList(ratings, currentWorkmate.getUid());
+                               WorkmateHelper.getWorkmate(currentWorkmate.getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                   @Override
+                                   public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                       Workmate workmate= documentSnapshot.toObject(Workmate.class);
+                                       List<String> ratings = workmate.getRatings();
+                                       if (ratings.contains(restaurantName)){
+                                           ratings.remove(restaurantName);
+                                       }else {
+                                           ratings.add(restaurantName);
+                                       }
+                                       WorkmateHelper.updateRatingsList(ratings, currentWorkmate.getUid());
+                                   }
+                               });
+                               likeImage.setImageResource(R.drawable.ic_baseline_star_yelow_24);
+
                            }
                        });
 

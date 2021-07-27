@@ -28,7 +28,6 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.configureTwitterAuth();
         setContentView(R.layout.activity_main);
         this.startSigningActivity();
 
@@ -91,11 +90,6 @@ public class AuthActivity extends AppCompatActivity {
         }
     }
 
-    private void configureTwitterAuth(){
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(getString(R.string.consumer_key), getString(R.string.consumer_secret));
-        TwitterConfig twitterConfig = new TwitterConfig.Builder(this).twitterAuthConfig(authConfig).build();
-        Twitter.initialize(twitterConfig);
-    }
 
 
 }
