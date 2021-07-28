@@ -1,6 +1,9 @@
 package fr.kosdev.go4lunch.controller.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
 import android.location.Location;
 import android.view.View;
 import android.widget.ImageView;
@@ -44,8 +47,12 @@ public class ListViewViewHolder extends ViewHolder {
 
     Location destinationLoc;
     FusedLocationProviderClient mLocationProviderClient;
-    Location lastLocation;
-    Location location;
+    Result mResult;
+    Resources mResources;
+    Context mContext;
+    String restaurantStatus = null;
+    Activity mActivity;
+
 
 
 
@@ -62,13 +69,14 @@ public class ListViewViewHolder extends ViewHolder {
         restaurantName.setText(result.getName());
         restaurantVicinity.setText(result.getVicinity());
         OpeningHours openingHours = result.getOpeningHours();
-        if (openingHours != null){
-            if (result.getOpeningHours().getOpenNow()== true){
-                restaurantOpenHours.setText(R.string.open_text);
-            }else {
-                restaurantOpenHours.setText(R.string.close_text);
-            }
-        }
+        restaurantOpenHours.setText(updateOpenHours(openingHours));
+        //if (openingHours != null){
+            //if (result.getOpeningHours().getOpenNow()== true){
+                //restaurantOpenHours.setText(R.string.open_text);
+            //}else {
+                //restaurantOpenHours.setText(R.string.close_text);
+            //}
+        //}
 
         if (result.getPhotos().size() > 0){
             String restaurantPhoto = result.getPhotos().get(0).getPhotoReference();
@@ -128,6 +136,26 @@ public class ListViewViewHolder extends ViewHolder {
 
 
     }
+
+    public String updateOpenHours(OpeningHours openingHours){
+        //String restaurantStatus = null;
+        if (openingHours != null){
+            if (openingHours.getOpenNow()== true){
+                restaurantStatus = "Open";
+                //restaurantStatus = mResources.getString(R.string.open_text);
+                //restaurantStatus = mContext.getResources().getString(R.string.open_text);
+                //restaurantStatus = Resources.getSystem().getString(R.string.open_text);
+
+
+            }else {
+                restaurantStatus = "Closed";
+            }
+        }
+        return restaurantStatus;
+
+    }
+
+
     @SuppressLint("MissingPermission")
     public void updateListWithDetailResult(Results results){
 

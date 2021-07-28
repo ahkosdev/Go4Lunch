@@ -14,7 +14,6 @@ import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.controller.activities.ListViewViewHolder;
 import fr.kosdev.go4lunch.controller.activities.RestaurantDetailActivity;
 import fr.kosdev.go4lunch.model.pojo.Result;
-import fr.kosdev.go4lunch.model.pojo_detail.Results;
 
 public class ListViewAdapter extends RecyclerView.Adapter<ListViewViewHolder> {
 
