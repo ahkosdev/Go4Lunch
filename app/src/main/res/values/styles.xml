@@ -14,7 +14,7 @@
     
     <style name="MyRatingBar" parent="Widget.AppCompat.RatingBar.Small">
         <item name="colorAccent">#ffca18</item>
-        <item name="colorControlNormal">#ffca18</item>
+        <item name="colorControlNormal">#d4d2c9</item>
     </style>
 
 

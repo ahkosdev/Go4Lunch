@@ -15,13 +15,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.model.Workmate;
+import fr.kosdev.go4lunch.utils.Utils;
 
 public class RestaurantDetailsViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.workmates_img)
     ImageView restaurantImage;
     @BindView(R.id.workmates_txt)
-    TextView restaurantName;
+    TextView workmateName;
 
 
     public RestaurantDetailsViewHolder(@NonNull View itemView) {
@@ -34,7 +35,8 @@ public class RestaurantDetailsViewHolder extends RecyclerView.ViewHolder {
                 .load(workmate.getUrlPicture())
                 .apply(RequestOptions.circleCropTransform())
                 .into(restaurantImage);
-        restaurantName.setText(workmate.getFirstname() + " " + restaurantName.getContext().getResources().getString(R.string.joining_text));
+       workmateName.setText(Utils.getWorkmateDetailInfo(workmate,context));
+        //workmateName.setText(workmate.getFirstname() + " " + context.getResources().getString(R.string.joining_text));
 
     }
 }

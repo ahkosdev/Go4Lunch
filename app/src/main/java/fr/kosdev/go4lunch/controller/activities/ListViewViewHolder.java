@@ -28,6 +28,7 @@ import fr.kosdev.go4lunch.model.pojo.OpeningHours;
 import fr.kosdev.go4lunch.model.pojo.Result;
 import fr.kosdev.go4lunch.model.pojo_detail.DetailOpeningHours;
 import fr.kosdev.go4lunch.model.pojo_detail.Results;
+import fr.kosdev.go4lunch.utils.Utils;
 
 public class ListViewViewHolder extends ViewHolder {
 
@@ -50,7 +51,7 @@ public class ListViewViewHolder extends ViewHolder {
     Result mResult;
     Resources mResources;
     Context mContext;
-    String restaurantStatus = null;
+    //String restaurantStatus = null;
     Activity mActivity;
 
 
@@ -69,7 +70,8 @@ public class ListViewViewHolder extends ViewHolder {
         restaurantName.setText(result.getName());
         restaurantVicinity.setText(result.getVicinity());
         OpeningHours openingHours = result.getOpeningHours();
-        restaurantOpenHours.setText(updateOpenHours(openingHours));
+        //Context context
+        restaurantOpenHours.setText(Utils.updateOpenHours(openingHours, restaurantOpenHours.getContext()));
         //if (openingHours != null){
             //if (result.getOpeningHours().getOpenNow()== true){
                 //restaurantOpenHours.setText(R.string.open_text);
@@ -83,7 +85,8 @@ public class ListViewViewHolder extends ViewHolder {
             if (restaurantPhoto != null){
 
                 Glide.with(restaurantImage.getContext())
-                        .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=400&photoreference="+ restaurantPhoto +"&key=AIzaSyBk1fsJRc21Wlt0usxn_UtjPhY2waPqiRE")
+                        .load(Utils.getPhotoUrl(restaurantPhoto))
+                        //.load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=400&photoreference="+ restaurantPhoto +"&key=" + BuildConfig.GOOGLE_API_KEY)
                         .into(restaurantImage);
 
             }
@@ -92,14 +95,14 @@ public class ListViewViewHolder extends ViewHolder {
 
             double rating = result.getRating();
 
-            restaurantRating.setRating((float) rating);
-              if (rating >1 && rating <= 2){
-                  restaurantRating.setNumStars(1);
-               }else if (rating > 2 && rating <= 3){
-                  restaurantRating.setNumStars(2);
-              }else if (rating > 4){
-                  restaurantRating.setNumStars(3);
-              }
+            restaurantRating.setRating(Utils.configureRatings(rating));
+              //if (rating >1 && rating <= 2){
+                  //restaurantRating.setNumStars(1);
+              // }else if (rating > 2 && rating <= 3){
+                 // restaurantRating.setNumStars(2);
+              //}else if (rating > 4){
+                  //restaurantRating.setNumStars(3);
+             // }
 
 
             double lng = result.getGeometry().getLocation().getLng();
@@ -137,13 +140,13 @@ public class ListViewViewHolder extends ViewHolder {
 
     }
 
-    public String updateOpenHours(OpeningHours openingHours){
-        //String restaurantStatus = null;
+    public String updateOpenHours(OpeningHours openingHours, Context context){
+        String restaurantStatus = "";
         if (openingHours != null){
             if (openingHours.getOpenNow()== true){
-                restaurantStatus = "Open";
+                //restaurantStatus = "Open";
                 //restaurantStatus = mResources.getString(R.string.open_text);
-                //restaurantStatus = mContext.getResources().getString(R.string.open_text);
+                restaurantStatus = context.getResources().getString(R.string.open_text);
                 //restaurantStatus = Resources.getSystem().getString(R.string.open_text);
 
 
@@ -152,6 +155,19 @@ public class ListViewViewHolder extends ViewHolder {
             }
         }
         return restaurantStatus;
+
+    }
+
+    public float configureRatings(Double rating){
+        int numberOfNumStars = 0;
+        if (rating >1 && rating <= 2){
+            numberOfNumStars = 1;
+        }else if (rating > 2 && rating <= 3){
+            numberOfNumStars = 2;
+        }else if (rating > 4){
+            numberOfNumStars = 3;
+        }
+        return numberOfNumStars;
 
     }
 
@@ -176,7 +192,8 @@ public class ListViewViewHolder extends ViewHolder {
         if (restaurantPhoto != null){
 
             Glide.with(restaurantImage.getContext())
-                    .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=400&photoreference="+ restaurantPhoto +"&key=AIzaSyBk1fsJRc21Wlt0usxn_UtjPhY2waPqiRE")
+                    .load(restaurantPhoto)
+                    //.load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=400&photoreference="+ restaurantPhoto +"&key=" + BuildConfig.GOOGLE_API_KEY)
                     .into(restaurantImage);
 
         }

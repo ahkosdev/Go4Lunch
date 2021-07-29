@@ -27,10 +27,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
@@ -42,6 +40,7 @@ import fr.kosdev.go4lunch.controller.NearbyViewModel;
 import fr.kosdev.go4lunch.controller.activities.RestaurantDetailActivity;
 import fr.kosdev.go4lunch.model.Workmate;
 import fr.kosdev.go4lunch.model.autocomplete.Prediction;
+import fr.kosdev.go4lunch.utils.Utils;
 
 
 public class MapFragment extends Fragment implements LocationListener {
@@ -108,9 +107,11 @@ public class MapFragment extends Fragment implements LocationListener {
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
                             String myLocation = location.getLatitude() + "," + location.getLongitude();
+                            Double latitude = location.getLatitude();
+                            Double longitude = location.getLongitude();
 
 
-                                nearbyViewModel.getNearbyRepository(myLocation).observe(getViewLifecycleOwner(), example -> {
+                                nearbyViewModel.getNearbyRepository(Utils.getMyLocation(latitude,longitude)).observe(getViewLifecycleOwner(), example -> {
 
                                     try {
 

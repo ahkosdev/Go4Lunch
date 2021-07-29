@@ -1,9 +1,5 @@
 package fr.kosdev.go4lunch.controller.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +7,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,8 +29,7 @@ import fr.kosdev.go4lunch.R;
 import fr.kosdev.go4lunch.api.WorkmateHelper;
 import fr.kosdev.go4lunch.model.Workmate;
 import fr.kosdev.go4lunch.model.pojo_detail.Results;
-
-import static com.google.firebase.auth.FirebaseAuth.getInstance;
+import fr.kosdev.go4lunch.utils.Utils;
 
 public class RestaurantDetailActivity extends AppCompatActivity {
 
@@ -114,7 +112,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                        String photoReference = exampleDetail.getResults().getPhotos().get(0).getPhotoReference();
                        if (photoReference != null)
                        Glide.with(restaurantImage.getContext())
-                               .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=600&photoreference="+ photoReference +"&key=AIzaSyBk1fsJRc21Wlt0usxn_UtjPhY2waPqiRE")
+                               .load(Utils.getPhotoUrl(photoReference))
+                               //.load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=600&photoreference="+ photoReference +"&key=" + BuildConfig.GOOGLE_API_KEY)
                                .into(restaurantImage);
                        callButton.setOnClickListener(new View.OnClickListener() {
                            @Override
@@ -178,10 +177,10 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
                    });
 
-
             }
         }
     }
+
     private void updateUIWithCurrentWorkmatePlaceId(){
         Intent intent = getIntent();
         if (intent != null){
@@ -193,7 +192,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     String photoReference = exampleDetail.getResults().getPhotos().get(0).getPhotoReference();
                     if (photoReference != null)
                         Glide.with(restaurantImage.getContext())
-                                .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=600&photoreference="+ photoReference +"&key=AIzaSyBk1fsJRc21Wlt0usxn_UtjPhY2waPqiRE")
+                                .load(Utils.getPhotoUrl(photoReference))
+                                //.load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=600&photoreference="+ photoReference +"&key="+ BuildConfig.GOOGLE_API_KEY)
                                 .into(restaurantImage);
                     callButton.setOnClickListener(new View.OnClickListener() {
                         @Override
